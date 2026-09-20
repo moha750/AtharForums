@@ -277,6 +277,8 @@
     "settingsAbout": "About Athar",
     "settingsContact": "Contact email",
     "confirmDelete": "Delete this? It cannot be undone.",
-    "noAccess": "This page is for the Athar admin team only."
+    "noAccess": "This page is for the Athar admin team only.",
+    "forumSkillsHint": "Separate with commas",
+    "forumOrder": "Order"
   }
 }

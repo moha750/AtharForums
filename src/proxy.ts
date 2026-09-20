@@ -2,6 +2,7 @@ import createIntlMiddleware from 'next-intl/middleware'
 import { NextResponse, type NextRequest } from 'next/server'
 import { routing } from '@/i18n/routing'
 import { updateSession } from '@/lib/supabase/proxy'
+import { previewMode } from '@/lib/fixtures'
 
 const handleIntl = createIntlMiddleware(routing)
 
@@ -25,6 +26,9 @@ function hasAuthCookie(request: NextRequest): boolean {
 
 export async function proxy(request: NextRequest) {
   const intlResponse = handleIntl(request)
+
+  // وضع المعاينة بلا قاعدة بيانات: لا جلسات ولا حارس دخول — للعرض فقط
+  if (previewMode) return intlResponse
 
   const { locale, path } = splitLocale(request.nextUrl.pathname)
   const needsAuth = PROTECTED_PREFIXES.some(

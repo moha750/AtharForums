@@ -96,7 +96,7 @@ export function ForumForm({ forum, locale }: { forum?: Forum; locale: string }) 
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="skills" hint="،">
+        <Label htmlFor="skills" hint={t('forumSkillsHint')}>
           {t('forumSkills')}
         </Label>
         <Input id="skills" name="skills" defaultValue={forum?.skills.join('، ') ?? ''} />
@@ -172,8 +172,8 @@ export function ForumForm({ forum, locale }: { forum?: Forum; locale: string }) 
           />
           {t('forumAutoApprove')}
         </label>
-        <div className="ms-auto w-28 space-y-1.5">
-          <Label htmlFor="sort_order">#</Label>
+        <div className="ms-auto w-32 space-y-1.5">
+          <Label htmlFor="sort_order">{t('forumOrder')}</Label>
           <Input
             id="sort_order"
             name="sort_order"

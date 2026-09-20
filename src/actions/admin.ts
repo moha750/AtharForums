@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getCurrentProfile, isAdmin } from '@/lib/auth'
+import { previewMode } from '@/lib/fixtures'
 
 export type AdminState = { status: 'idle' | 'success' | 'error'; message?: string }
 
@@ -30,6 +31,8 @@ function localeOf(formData: FormData): string {
 }
 
 async function requireAdmin() {
+  // وضع المعاينة للعرض فقط — لا كتابة تحته مهما كان الملف المعروض
+  if (previewMode) throw new Error('preview-mode-is-read-only')
   const profile = await getCurrentProfile()
   if (!isAdmin(profile)) throw new Error('forbidden')
   return profile!

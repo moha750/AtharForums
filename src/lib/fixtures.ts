@@ -4,7 +4,9 @@ import type {
   ForumMemberPublic,
   PlatformStats,
   Post,
+  Profile,
   PublicSettings,
+  WaitlistSubscriber,
 } from '@/lib/database.types'
 
 /**
@@ -273,3 +275,78 @@ export const fixtureStats: PlatformStats = {
   events: 9,
   upcoming_events: 4,
 }
+
+export const fixtureProfile: Profile = {
+  id: '00000000-0000-0000-0000-000000000001',
+  email: 'admin@hrsd.gov.sa',
+  full_name_ar: 'مشرف المعاينة',
+  full_name_en: 'Preview Admin',
+  employee_no: null,
+  job_title: 'إدارة منتديات أثر',
+  department: null,
+  sector: null,
+  work_location: null,
+  phone: null,
+  avatar_url: null,
+  bio: null,
+  skills: [],
+  interests: [],
+  role: 'super_admin',
+  is_active: true,
+  onboarded_at: null,
+  created_at: '2026-09-01T00:00:00Z',
+  updated_at: '2026-09-01T00:00:00Z',
+}
+
+export const fixtureApplications = [
+  {
+    id: 'm1',
+    forum_id: fixtureForums[0].id,
+    profile_id: 'a9',
+    role: 'member' as const,
+    status: 'pending' as const,
+    motivation:
+      'أعمل في الاتصال المؤسسي منذ ثلاث سنوات وأصوّر وأونتج كهواية. أحبّ أن أسخّر ذلك لتغطية فعاليات المنتديات وإنتاج مواد تعرّف بعمل الوزارة.',
+    relevant_skills: ['التصوير', 'المونتاج'],
+    applied_at: '2026-09-18T08:00:00Z',
+    decided_at: null,
+    decided_by: null,
+    decision_note: null,
+    forums: {
+      id: fixtureForums[0].id,
+      slug: fixtureForums[0].slug,
+      name_ar: fixtureForums[0].name_ar,
+      name_en: fixtureForums[0].name_en,
+    },
+    profiles: {
+      id: 'a9',
+      email: 'r.alharbi@hrsd.gov.sa',
+      full_name_ar: 'ريم الحربي',
+      full_name_en: 'Reem Alharbi',
+      job_title: 'أخصائية اتصال',
+      department: 'الإدارة العامة للاتصال المؤسسي',
+      skills: ['التصوير'],
+    },
+  },
+]
+
+export const fixtureWaitlist: WaitlistSubscriber[] = [
+  {
+    id: 'w1',
+    email: 's.alotaibi@hrsd.gov.sa',
+    full_name: null,
+    source: 'teaser',
+    interests: [],
+    notified_at: null,
+    created_at: '2026-09-19T10:00:00Z',
+  },
+  {
+    id: 'w2',
+    email: 'm.alzahrani@hrsd.gov.sa',
+    full_name: null,
+    source: 'teaser',
+    interests: [],
+    notified_at: null,
+    created_at: '2026-09-19T14:20:00Z',
+  },
+]

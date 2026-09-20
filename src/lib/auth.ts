@@ -1,6 +1,6 @@
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
-import { previewMode } from '@/lib/fixtures'
+import { fixtureProfile, previewMode } from '@/lib/fixtures'
 import type { Profile } from '@/lib/database.types'
 
 /**
@@ -8,7 +8,7 @@ import type { Profile } from '@/lib/database.types'
  * cache() يمنع تكرار الاستعلام داخل الطلب الواحد.
  */
 export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
-  if (previewMode) return null
+  if (previewMode) return fixtureProfile
   const supabase = await createClient()
   const {
     data: { user },
