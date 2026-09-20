@@ -1,0 +1,275 @@
+import type {
+  AtharEvent,
+  Forum,
+  ForumMemberPublic,
+  PlatformStats,
+  Post,
+  PublicSettings,
+} from '@/lib/database.types'
+
+/**
+ * وضع المعاينة بلا قاعدة بيانات.
+ *
+ * يُفعَّل بـ ATHAR_PREVIEW_FIXTURES=1 فقط، ووجوده واضح للعين: البيانات كلها
+ * تجريبية. الغرض مراجعة الواجهة وتصميمها على جهاز لا يصل إلى Supabase — لا
+ * يُستخدم في الإنتاج، ولا يمنح أي صلاحية: كل ما يفعله أنه يعيد بيانات ثابتة.
+ */
+export const previewMode = process.env.ATHAR_PREVIEW_FIXTURES === '1'
+
+export const fixtureSettings: PublicSettings = {
+  launch_at: '2026-09-27T09:00:00Z',
+  teaser_mode: false,
+  registration_open: true,
+  allowed_email_domains: ['hrsd.gov.sa'],
+  site_name_ar: 'منتديات أثر',
+  site_name_en: 'Athar Forums',
+  tagline_ar: 'منتديات تواصل .. تصنع أثراً',
+  tagline_en: 'Forums that connect, and leave a mark',
+  about_ar:
+    'منتديات أثر مبادرة من وزارة الموارد البشرية والتنمية الاجتماعية تجمع منسوبي الوزارة حول ما يجيدونه وما يحبّونه. كل منتدى مساحة يقودها الموظفون أنفسهم.',
+  about_en:
+    'Athar Forums is an initiative by the Ministry of Human Resources and Social Development bringing employees together around what they are good at and what they love.',
+  contact_email: 'athar@hrsd.gov.sa',
+}
+
+const base = {
+  cover_url: null,
+  mission_ar: 'نلتقي مرّتين في الشهر، ونخرج بمادة أو مبادرة يستفيد منها زملاؤنا.',
+  mission_en: 'We meet twice a month and ship something colleagues can use.',
+  capacity: null,
+  auto_approve: false,
+  is_accepting: true,
+  status: 'published' as const,
+  created_at: '2026-09-01T00:00:00Z',
+  updated_at: '2026-09-01T00:00:00Z',
+  created_by: null,
+}
+
+export const fixtureForums: Forum[] = [
+  {
+    ...base,
+    id: '11111111-1111-1111-1111-111111111111',
+    slug: 'media-content',
+    name_ar: 'منتدى الإعلام والمحتوى',
+    name_en: 'Media & Content Forum',
+    tagline_ar: 'نحكي قصة الوزارة بصورة وصوت',
+    tagline_en: "Telling the Ministry's story in sound and image",
+    description_ar:
+      'مساحة لمن يجيد التصوير والمونتاج والتصميم وكتابة المحتوى. ننتج معًا موادّ تعرّف بعمل الوزارة، ونتدرّب على أدوات الإنتاج الحديثة، ونغطّي فعاليات المنتديات.',
+    description_en:
+      'For those skilled in photography, editing, design and writing. We produce material that shows the work of the Ministry.',
+    icon: 'Clapperboard',
+    color: 'ember',
+    skills: ['التصوير', 'المونتاج', 'التصميم الجرافيكي', 'كتابة المحتوى'],
+    sort_order: 10,
+    members_count: 24,
+  },
+  {
+    ...base,
+    id: '22222222-2222-2222-2222-222222222222',
+    slug: 'tech-innovation',
+    name_ar: 'منتدى التقنية والابتكار',
+    name_en: 'Technology & Innovation Forum',
+    tagline_ar: 'من فكرة على ورق إلى أداة تعمل',
+    tagline_en: 'From an idea on paper to a working tool',
+    description_ar:
+      'للمهتمين بالبرمجة وتحليل البيانات والذكاء الاصطناعي وأتمتة الأعمال. نبني حلولًا صغيرة تخدم زملاءنا، ونتبادل الخبرة التقنية، ونستضيف ورشًا عملية.',
+    description_en: 'For those interested in programming, data analysis, AI and automation.',
+    icon: 'Cpu',
+    color: 'teal',
+    skills: ['البرمجة', 'تحليل البيانات', 'الذكاء الاصطناعي', 'أتمتة الأعمال'],
+    sort_order: 20,
+    members_count: 31,
+    capacity: 40,
+  },
+  {
+    ...base,
+    id: '33333333-3333-3333-3333-333333333333',
+    slug: 'reading-knowledge',
+    name_ar: 'منتدى القراءة والمعرفة',
+    name_en: 'Reading & Knowledge Forum',
+    tagline_ar: 'كتاب نقرؤه، وحوار يستحقّ الوقت',
+    tagline_en: 'A book worth reading, a conversation worth having',
+    description_ar:
+      'نادٍ للقراءة وجلسات معرفية شهرية. نختار كتابًا، نقرؤه، ونلتقي لنتحاور فيه — ونستضيف ضيوفًا يثرون النقاش.',
+    description_en: 'A reading club with monthly knowledge sessions.',
+    icon: 'BookOpen',
+    color: 'sage',
+    skills: ['القراءة', 'الكتابة', 'إدارة الحوار'],
+    sort_order: 30,
+    members_count: 18,
+  },
+  {
+    ...base,
+    id: '44444444-4444-4444-4444-444444444444',
+    slug: 'volunteering',
+    name_ar: 'منتدى التطوع والأثر المجتمعي',
+    name_en: 'Volunteering & Social Impact Forum',
+    tagline_ar: 'أثرٌ يبدأ من الوزارة ويصل أبعد',
+    tagline_en: 'Impact that starts here and reaches further',
+    description_ar:
+      'نخطّط وننفّذ مبادرات تطوعية تخدم المجتمع، ونستثمر خبرة منسوبي الوزارة في التنمية الاجتماعية لخدمة الناس مباشرة.',
+    description_en: 'We plan and run volunteer initiatives serving the community.',
+    icon: 'HeartHandshake',
+    color: 'sage',
+    skills: ['تنظيم الفعاليات', 'العمل التطوعي', 'إدارة المبادرات'],
+    sort_order: 40,
+    members_count: 27,
+  },
+  {
+    ...base,
+    id: '55555555-5555-5555-5555-555555555555',
+    slug: 'professional-growth',
+    name_ar: 'منتدى التطوير المهني',
+    name_en: 'Professional Growth Forum',
+    tagline_ar: 'مهارة كل شهر، ومسار يتّضح',
+    tagline_en: 'A skill a month, a path that clears up',
+    description_ar:
+      'ورش ولقاءات تركّز على المهارات التي تنفع في العمل: العرض والإلقاء، إدارة المشاريع، التفاوض، وأدوات الإنتاجية.',
+    description_en: 'Workshops focused on skills that matter at work.',
+    icon: 'GraduationCap',
+    color: 'teal',
+    skills: ['العرض والإلقاء', 'إدارة المشاريع', 'التفاوض', 'الإنتاجية'],
+    sort_order: 50,
+    members_count: 42,
+  },
+  {
+    ...base,
+    id: '66666666-6666-6666-6666-666666666666',
+    slug: 'sports-fitness',
+    name_ar: 'منتدى الرياضة واللياقة',
+    name_en: 'Sports & Fitness Forum',
+    tagline_ar: 'نتحرّك معًا',
+    tagline_en: 'We move together',
+    description_ar:
+      'تحدّيات مشي، ودوريات ودّية، ولقاءات رياضية تجمع منسوبي الوزارة خارج قاعات الاجتماعات.',
+    description_en: 'Walking challenges, friendly tournaments and sports meetups.',
+    icon: 'Activity',
+    color: 'ember',
+    skills: ['تنظيم البطولات', 'التدريب الرياضي', 'قيادة الفرق'],
+    sort_order: 60,
+    members_count: 35,
+    is_accepting: false,
+  },
+]
+
+export const fixtureMembers: ForumMemberPublic[] = [
+  {
+    profile_id: 'a1',
+    full_name_ar: 'سارة الدوسري',
+    full_name_en: 'Sarah Aldossari',
+    job_title: 'أخصائية اتصال مؤسسي',
+    avatar_url: null,
+    skills: ['كتابة المحتوى'],
+    membership_role: 'lead',
+    joined_at: '2026-09-02T00:00:00Z',
+  },
+  {
+    profile_id: 'a2',
+    full_name_ar: 'عبدالله القحطاني',
+    full_name_en: 'Abdullah Alqahtani',
+    job_title: 'مصمّم جرافيك',
+    avatar_url: null,
+    skills: ['التصميم الجرافيكي'],
+    membership_role: 'core',
+    joined_at: '2026-09-03T00:00:00Z',
+  },
+  {
+    profile_id: 'a3',
+    full_name_ar: 'نورة العتيبي',
+    full_name_en: 'Noura Alotaibi',
+    job_title: 'محلّلة بيانات',
+    avatar_url: null,
+    skills: ['تحليل البيانات'],
+    membership_role: 'member',
+    joined_at: '2026-09-05T00:00:00Z',
+  },
+  {
+    profile_id: 'a4',
+    full_name_ar: 'فهد الشمري',
+    full_name_en: 'Fahad Alshammari',
+    job_title: 'مصوّر',
+    avatar_url: null,
+    skills: ['التصوير'],
+    membership_role: 'member',
+    joined_at: '2026-09-06T00:00:00Z',
+  },
+]
+
+export const fixtureEvents: AtharEvent[] = [
+  {
+    id: 'e1',
+    forum_id: '11111111-1111-1111-1111-111111111111',
+    slug: 'photo-workshop',
+    title_ar: 'ورشة التصوير الاحترافي بالجوال',
+    title_en: 'Pro mobile photography workshop',
+    description_ar: 'ورشة عملية لمدة ساعتين.',
+    description_en: 'A hands-on two-hour workshop.',
+    cover_url: null,
+    starts_at: '2026-10-05T11:00:00Z',
+    ends_at: '2026-10-05T13:00:00Z',
+    mode: 'onsite',
+    location_ar: 'قاعة التدريب — المبنى الرئيسي',
+    location_en: 'Training hall — HQ',
+    meeting_url: null,
+    capacity: 25,
+    registration_open: true,
+    members_only: false,
+    registrations_count: 12,
+    status: 'published',
+    created_at: '2026-09-10T00:00:00Z',
+    updated_at: '2026-09-10T00:00:00Z',
+    created_by: null,
+  },
+  {
+    id: 'e2',
+    forum_id: '33333333-3333-3333-3333-333333333333',
+    slug: 'book-circle-october',
+    title_ar: 'حلقة الكتاب — لقاء أكتوبر',
+    title_en: 'Book circle — October',
+    description_ar: 'نناقش كتاب الشهر.',
+    description_en: 'We discuss the book of the month.',
+    cover_url: null,
+    starts_at: '2026-10-12T13:30:00Z',
+    ends_at: null,
+    mode: 'hybrid',
+    location_ar: 'مكتبة الوزارة',
+    location_en: 'Ministry library',
+    meeting_url: null,
+    capacity: null,
+    registration_open: true,
+    members_only: false,
+    registrations_count: 8,
+    status: 'published',
+    created_at: '2026-09-11T00:00:00Z',
+    updated_at: '2026-09-11T00:00:00Z',
+    created_by: null,
+  },
+]
+
+export const fixturePosts: Post[] = [
+  {
+    id: 'p1',
+    forum_id: null,
+    slug: 'athar-launch',
+    title_ar: 'انطلاق منتديات أثر',
+    title_en: 'Athar Forums is live',
+    excerpt_ar: 'ثمانية منتديات تفتح أبوابها لمنسوبي الوزارة بدءًا من اليوم.',
+    excerpt_en: 'Eight forums open their doors to Ministry employees starting today.',
+    body_ar: null,
+    body_en: null,
+    cover_url: null,
+    status: 'published',
+    published_at: '2026-09-27T09:00:00Z',
+    author_id: null,
+    created_at: '2026-09-27T09:00:00Z',
+    updated_at: '2026-09-27T09:00:00Z',
+  },
+]
+
+export const fixtureStats: PlatformStats = {
+  forums: fixtureForums.length,
+  members: 177,
+  events: 9,
+  upcoming_events: 4,
+}

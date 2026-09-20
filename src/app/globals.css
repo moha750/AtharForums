@@ -1,0 +1,331 @@
+@import "tailwindcss";
+
+/* يجعل ‎dark:‎ يعمل مع تفضيل النظام ومع التبديل اليدوي (data-theme) معًا */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+  &:where(:root[data-theme="dark"] *) {
+    @slot;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   منتديات أثر — نظام التصميم
+   الألوان مستخرجة من شعار منتديات أثر وهوية وزارة الموارد البشرية والتنمية
+   الاجتماعية: الفيروزي العميق أساسًا، والأخضر ثانويًا، والبرتقالي/الذهبي لمسة.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── الفيروزي (اللون الأساسي) ─────────────────────────────────────────── */
+  --color-teal-50:  #eff9fa;
+  --color-teal-100: #d7f0f2;
+  --color-teal-200: #b3e2e7;
+  --color-teal-300: #7fccd6;
+  --color-teal-400: #44adbd;
+  --color-teal-500: #158285;
+  --color-teal-600: #027c7c;
+  --color-teal-700: #026571;
+  --color-teal-800: #06525c;
+  --color-teal-900: #0a444e;
+  --color-teal-950: #032b33;
+
+  /* ── الأخضر (ثانوي) ───────────────────────────────────────────────────── */
+  --color-sage-50:  #ebfcf6;
+  --color-sage-100: #cdf7e9;
+  --color-sage-200: #9fedd6;
+  --color-sage-300: #63ddbe;
+  --color-sage-400: #2bb574;
+  --color-sage-500: #00a992;
+  --color-sage-600: #009a8e;
+  --color-sage-700: #027c73;
+  --color-sage-800: #05625c;
+  --color-sage-900: #06514c;
+  --color-sage-950: #01312f;
+
+  /* ── البرتقالي/الذهبي (لمسة) ──────────────────────────────────────────── */
+  --color-ember-50:  #fff9ec;
+  --color-ember-100: #fff2d3;
+  --color-ember-200: #ffe1a5;
+  --color-ember-300: #fecb6d;
+  --color-ember-400: #fcb614;
+  --color-ember-500: #f7941d;
+  --color-ember-600: #e0710d;
+  --color-ember-700: #ba520e;
+  --color-ember-800: #974012;
+  --color-ember-900: #7c3612;
+  --color-ember-950: #471a05;
+
+  /* ── الرمادي المحايد (مائل قليلًا للفيروزي ليتناغم مع الهوية) ─────────── */
+  --color-ink-50:  #f6f8f8;
+  --color-ink-100: #eceff0;
+  --color-ink-200: #d5dcdd;
+  --color-ink-300: #b1bdbf;
+  --color-ink-400: #86999c;
+  --color-ink-500: #6a7d81;
+  --color-ink-600: #5b6b6f;
+  --color-ink-700: #4d595d;
+  --color-ink-800: #434c4f;
+  --color-ink-900: #3b4244;
+  --color-ink-950: #1f2527;
+
+  /* ── الخطوط ───────────────────────────────────────────────────────────── */
+  --font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans Variable", "IBM Plex Sans",
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-latin: "IBM Plex Sans Variable", "IBM Plex Sans", ui-sans-serif, system-ui,
+    sans-serif;
+
+  /* ── الانحناءات ───────────────────────────────────────────────────────── */
+  --radius-xs: 0.375rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
+  --radius-2xl: 1.75rem;
+
+  /* ── الظلال ───────────────────────────────────────────────────────────── */
+  --shadow-soft: 0 1px 2px rgb(2 101 113 / 0.04), 0 8px 24px -12px rgb(2 101 113 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(2 101 113 / 0.05), 0 16px 40px -16px rgb(2 101 113 / 0.26);
+  --shadow-ring: 0 0 0 1px rgb(2 101 113 / 0.08);
+
+  /* ── الحركة ───────────────────────────────────────────────────────────── */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   التوكنز الدلالية — تتبدّل مع الوضع الفاتح/الداكن
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-subtle: var(--bg-subtle);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-fg: var(--primary-fg);
+  --color-primary-soft: var(--primary-soft);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-accent-soft: var(--accent-soft);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --bg: #ffffff;
+  --bg-subtle: #f6f9f9;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --fg: #12252a;
+  --fg-muted: #4d595d;
+  --fg-subtle: #6a7d81;
+  --border: #e2e9ea;
+  --border-strong: #cbd8da;
+  --primary: #026571;
+  --primary-hover: #024c55;
+  --primary-fg: #ffffff;
+  --primary-soft: #eff9fa;
+  --accent: #f7941d;
+  --accent-fg: #3d2205;
+  --accent-soft: #fff6e8;
+  --success: #067a5c;
+  --success-soft: #e8f7f1;
+  --warning: #9a6206;
+  --warning-soft: #fff5e3;
+  --danger: #b3261e;
+  --danger-soft: #fdeceb;
+  --ring: #158285;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0c1416;
+    --bg-subtle: #101a1d;
+    --surface: #131f22;
+    --surface-raised: #18272b;
+    --fg: #e8f0f1;
+    --fg-muted: #a5b6b9;
+    --fg-subtle: #7f9296;
+    --border: #23353a;
+    --border-strong: #32484e;
+    --primary: #3fb2bd;
+    --primary-hover: #63c7d0;
+    --primary-fg: #04232a;
+    --primary-soft: #0f2a2f;
+    --accent: #fcb614;
+    --accent-fg: #2a1a01;
+    --accent-soft: #2a2008;
+    --success: #4dc79e;
+    --success-soft: #0d2820;
+    --warning: #f0b429;
+    --warning-soft: #2c2208;
+    --danger: #ff8a80;
+    --danger-soft: #331815;
+    --ring: #3fb2bd;
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c1416;
+  --bg-subtle: #101a1d;
+  --surface: #131f22;
+  --surface-raised: #18272b;
+  --fg: #e8f0f1;
+  --fg-muted: #a5b6b9;
+  --fg-subtle: #7f9296;
+  --border: #23353a;
+  --border-strong: #32484e;
+  --primary: #3fb2bd;
+  --primary-hover: #63c7d0;
+  --primary-fg: #04232a;
+  --primary-soft: #0f2a2f;
+  --accent: #fcb614;
+  --accent-fg: #2a1a01;
+  --accent-soft: #2a2008;
+  --success: #4dc79e;
+  --success-soft: #0d2820;
+  --warning: #f0b429;
+  --warning-soft: #2c2208;
+  --danger: #ff8a80;
+  --danger-soft: #331815;
+  --ring: #3fb2bd;
+
+  color-scheme: dark;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   الأساسيات
+   ══════════════════════════════════════════════════════════════════════════ */
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* الأرقام العربية الشرقية غير مرغوبة في الواجهة — نثبّت الأرقام اللاتينية */
+  html[lang="ar"] {
+    font-feature-settings: "ss01" off;
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: 600;
+    letter-spacing: -0.011em;
+    text-wrap: balance;
+  }
+
+  html[dir="rtl"] :where(h1, h2, h3, h4, h5, h6) {
+    letter-spacing: 0;
+  }
+
+  :where(p, li) {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-fg);
+  }
+
+  /* الحقول */
+  :where(input, textarea, select, button) {
+    font: inherit;
+  }
+
+  [dir="ltr"] .font-latin,
+  .font-latin {
+    font-family: var(--font-latin);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .container-athar {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem;
+    max-width: 80rem;
+  }
+
+  @media (min-width: 640px) {
+    .container-athar { padding-inline: 1.5rem; }
+  }
+
+  @media (min-width: 1024px) {
+    .container-athar { padding-inline: 2rem; }
+  }
+
+  /* تدرّج هوية أثر */
+  .bg-athar-gradient {
+    background-image: linear-gradient(135deg, #026571 0%, #027c7c 38%, #009a8e 72%, #2bb574 100%);
+  }
+
+  .text-athar-gradient {
+    background-image: linear-gradient(120deg, #026571 0%, #009a8e 55%, #2bb574 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bg-ember-gradient {
+    background-image: linear-gradient(135deg, #fcb614 0%, #f7941d 100%);
+  }
+
+  /* شبكة خفيفة للخلفيات */
+  .bg-athar-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--border) 60%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+
+  .mask-fade-b {
+    mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
+  }
+}
