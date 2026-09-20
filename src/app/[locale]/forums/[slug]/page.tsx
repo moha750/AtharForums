@@ -178,7 +178,8 @@ export default async function ForumPage({
               </h2>
               {members.length === 0 ? (
                 <p className="mt-3 rounded-xl bg-[var(--bg-subtle)] px-4 py-5 text-sm text-[var(--fg-subtle)]">
-                  {t('membersEmpty')}
+                  {/* دليل الأعضاء لا يُكشف للعموم — أسماء الموظفين ليست محتوى عامًا */}
+                  {profile ? t('membersEmpty') : t('membersSignedOut')}
                 </p>
               ) : (
                 <ul className="mt-4 grid gap-3 sm:grid-cols-2">

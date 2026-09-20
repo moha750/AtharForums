@@ -106,7 +106,8 @@
     "skillsLabel": "Your relevant skills",
     "skillsPlaceholder": "Separate with commas",
     "applySubmit": "Send application",
-    "applySuccess": "We received your application. The forum team will review it and let you know."
+    "applySuccess": "We received your application. The forum team will review it and let you know.",
+    "membersSignedOut": "Sign in to see the forum members."
   },
   "auth": {
     "loginHeading": "Sign in",

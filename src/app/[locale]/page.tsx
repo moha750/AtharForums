@@ -5,7 +5,7 @@ import { TeaserPage } from '@/components/teaser/teaser-page'
 import { HomePage } from '@/components/home/home-page'
 import { SiteShell } from '@/components/site/site-shell'
 import { getPublicSettings, hasLaunched } from '@/lib/settings'
-import { getCurrentProfile, isStaff } from '@/lib/auth'
+import { getCurrentProfile, isAdmin } from '@/lib/auth'
 import { isLocale } from '@/i18n/routing'
 
 export const dynamic = 'force-dynamic'
@@ -19,9 +19,9 @@ export default async function IndexPage({ params }: { params: Promise<{ locale: 
   const launched = hasLaunched(settings)
 
   if (!launched) {
-    // فريق أثر يرى الموقع الكامل للمراجعة قبل التدشين
+    // إدارة أثر ترى الموقع الكامل للمراجعة قبل التدشين
     const profile = await getCurrentProfile()
-    if (!isStaff(profile)) {
+    if (!isAdmin(profile)) {
       return <TeaserPage settings={settings} locale={locale} />
     }
   }

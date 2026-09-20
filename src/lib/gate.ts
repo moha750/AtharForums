@@ -1,6 +1,6 @@
 import { redirect } from '@/i18n/navigation'
 import { getPublicSettings, hasLaunched } from '@/lib/settings'
-import { getCurrentProfile, isStaff } from '@/lib/auth'
+import { getCurrentProfile, isAdmin } from '@/lib/auth'
 import type { Locale } from '@/i18n/routing'
 import type { PublicSettings } from '@/lib/database.types'
 
@@ -12,8 +12,10 @@ export async function requireLaunched(locale: Locale): Promise<PublicSettings> {
   const settings = await getPublicSettings()
   if (hasLaunched(settings)) return settings
 
+  // المشرفون فقط: سياسات قاعدة البيانات تفتح المحتوى قبل التدشين لـ is_admin()
+  // وحده، فلو سمحنا هنا لرئيس المنتدى لرأى موقعًا فارغًا لا موقعًا مبكّرًا.
   const profile = await getCurrentProfile()
-  if (isStaff(profile)) return settings
+  if (isAdmin(profile)) return settings
 
   redirect({ href: '/', locale })
   // redirect() لا يعود أبدًا — هذا السطر لإرضاء المحلّل الثابت فقط
