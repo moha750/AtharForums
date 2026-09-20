@@ -19,14 +19,16 @@ export async function registerForEvent(formData: FormData) {
   } = await supabase.auth.getUser()
   if (!user) return
 
-  await supabase
+  const { error } = await supabase
     .from('event_registrations')
     .upsert(
       { event_id: parsed.data.eventId, profile_id: user.id, status: 'registered' },
       { onConflict: 'event_id,profile_id' }
     )
 
-  revalidatePath(`/events/${parsed.data.slug}`)
+  if (error) console.error('[athar] registerForEvent failed', error)
+
+  revalidatePath('/', 'layout')
 }
 
 export async function cancelEventRegistration(formData: FormData) {
@@ -42,11 +44,13 @@ export async function cancelEventRegistration(formData: FormData) {
   } = await supabase.auth.getUser()
   if (!user) return
 
-  await supabase
+  const { error, count } = await supabase
     .from('event_registrations')
-    .update({ status: 'cancelled' })
+    .update({ status: 'cancelled' }, { count: 'exact' })
     .eq('event_id', parsed.data.eventId)
     .eq('profile_id', user.id)
 
-  revalidatePath(`/events/${parsed.data.slug}`)
+  if (error || count === 0) console.error('[athar] cancelEventRegistration failed', { error, count })
+
+  revalidatePath('/', 'layout')
 }

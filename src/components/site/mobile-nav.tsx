@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { Link, usePathname } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { buttonStyles } from '@/components/ui/button'
 
 type Props = {
@@ -14,9 +14,7 @@ type Props = {
 
 export function MobileNav({ links, signedIn, isAdmin, labels }: Props) {
   const [open, setOpen] = useState(false)
-  const pathname = usePathname()
-
-  useEffect(() => setOpen(false), [pathname])
+  const close = () => setOpen(false)
 
   useEffect(() => {
     if (!open) return
@@ -48,6 +46,7 @@ export function MobileNav({ links, signedIn, isAdmin, labels }: Props) {
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={close}
                 className="rounded-lg px-3 py-2.5 text-[0.95rem] font-medium text-[var(--fg)] transition-colors hover:bg-[var(--bg-subtle)]"
               >
                 {link.label}
@@ -58,16 +57,16 @@ export function MobileNav({ links, signedIn, isAdmin, labels }: Props) {
               {signedIn ? (
                 <>
                   {isAdmin ? (
-                    <Link href="/admin" className={buttonStyles('secondary', 'md')}>
+                    <Link href="/admin" onClick={close} className={buttonStyles('secondary', 'md')}>
                       {labels.admin}
                     </Link>
                   ) : null}
-                  <Link href="/me" className={buttonStyles('primary', 'md')}>
+                  <Link href="/me" onClick={close} className={buttonStyles('primary', 'md')}>
                     {labels.dashboard}
                   </Link>
                 </>
               ) : (
-                <Link href="/login" className={buttonStyles('primary', 'md')}>
+                <Link href="/login" onClick={close} className={buttonStyles('primary', 'md')}>
                   {labels.login}
                 </Link>
               )}

@@ -1,11 +1,26 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 
 type Labels = { days: string; hours: string; minutes: string; seconds: string }
 
-function remaining(target: number) {
-  const diff = Math.max(0, target - Date.now())
+/**
+ * ساعة تنبض كل ثانية.
+ *
+ * نستخدم useSyncExternalStore لا useEffect + useState: لقطة الخادم ثابتة
+ * (صفر) فيتطابق أول رسم على المتصفّح مع ما أرسله الخادم، ثم يقفز إلى الوقت
+ * الحقيقي بعد الترطيب — بلا تحذير تعارض ولا ومضة.
+ */
+function subscribe(onChange: () => void) {
+  const id = setInterval(onChange, 1000)
+  return () => clearInterval(id)
+}
+
+const getSnapshot = () => Math.floor(Date.now() / 1000)
+const getServerSnapshot = () => 0
+
+function remaining(target: number, now: number) {
+  const diff = Math.max(0, target - now)
   return {
     done: diff === 0,
     days: Math.floor(diff / 86_400_000),
@@ -24,19 +39,13 @@ export function Countdown({
   labels: Labels
   onDone?: React.ReactNode
 }) {
+  const nowSeconds = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+  const hydrated = nowSeconds !== 0
+
   const target = new Date(launchAt).getTime()
-  // نبدأ بقيم الخادم المحسوبة مرة واحدة، ثم نحدّث في المتصفّح كل ثانية
-  const [time, setTime] = useState(() => remaining(target))
-  const [mounted, setMounted] = useState(false)
+  const time = remaining(target, nowSeconds * 1000)
 
-  useEffect(() => {
-    setMounted(true)
-    setTime(remaining(target))
-    const id = setInterval(() => setTime(remaining(target)), 1000)
-    return () => clearInterval(id)
-  }, [target])
-
-  if (mounted && time.done) return <>{onDone}</>
+  if (hydrated && time.done) return <>{onDone}</>
 
   const cells: Array<[number, string]> = [
     [time.days, labels.days],
@@ -46,25 +55,16 @@ export function Countdown({
   ]
 
   return (
-    <div
-      className="flex items-stretch gap-2 sm:gap-3"
-      role="timer"
-      aria-live="off"
-      suppressHydrationWarning
-    >
-      {cells.map(([value, label], i) => (
+    <div className="flex items-stretch gap-2 sm:gap-3" role="timer" aria-live="off">
+      {cells.map(([value, label]) => (
         <div
           key={label}
           className="flex min-w-16 flex-1 flex-col items-center gap-1 rounded-xl bg-[var(--surface)] px-2 py-3 ring-1 ring-[var(--border)] sm:min-w-20 sm:px-4 sm:py-4"
         >
-          <span
-            className="font-latin text-2xl font-semibold tabular-nums text-[var(--primary)] sm:text-3xl"
-            suppressHydrationWarning
-          >
-            {mounted ? String(value).padStart(2, '0') : '––'}
+          <span className="font-latin text-2xl font-semibold tabular-nums text-[var(--primary)] sm:text-3xl">
+            {hydrated ? String(value).padStart(2, '0') : '––'}
           </span>
           <span className="text-[0.7rem] text-[var(--fg-subtle)] sm:text-xs">{label}</span>
-          <span className="sr-only">{i === 0 ? '' : ''}</span>
         </div>
       ))}
     </div>

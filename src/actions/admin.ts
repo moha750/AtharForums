@@ -115,7 +115,8 @@ export async function deleteForum(formData: FormData) {
   const id = String(formData.get('id') ?? '')
   if (!id) return
   const supabase = await createClient()
-  await supabase.from('forums').delete().eq('id', id)
+  const { error } = await supabase.from('forums').delete().eq('id', id)
+  if (error) console.error('[athar] deleteForum failed', error)
   revalidatePath('/', 'layout')
 }
 
@@ -128,15 +129,21 @@ export async function decideApplication(formData: FormData) {
   if (!id || !['approved', 'rejected'].includes(decision)) return
 
   const supabase = await createClient()
-  await supabase
+  const { error, count } = await supabase
     .from('forum_memberships')
-    .update({
-      status: decision as 'approved' | 'rejected',
-      decided_at: new Date().toISOString(),
-      decided_by: profile.id,
-      decision_note: (formData.get('note') as string | null) || null,
-    })
+    .update(
+      {
+        status: decision as 'approved' | 'rejected',
+        decided_at: new Date().toISOString(),
+        decided_by: profile.id,
+        decision_note: (formData.get('note') as string | null) || null,
+      },
+      { count: 'exact' }
+    )
     .eq('id', id)
+
+  // صفر صفوف يعني أن السياسة رفضت العملية بصمت — لا تمرّ دون أثر
+  if (error || count === 0) console.error('[athar] decideApplication failed', { error, count, id })
 
   revalidatePath('/', 'layout')
 }
@@ -148,10 +155,11 @@ export async function setMembershipRole(formData: FormData) {
   if (!id || !['member', 'core', 'lead'].includes(role)) return
 
   const supabase = await createClient()
-  await supabase
+  const { error, count } = await supabase
     .from('forum_memberships')
-    .update({ role: role as 'member' | 'core' | 'lead' })
+    .update({ role: role as 'member' | 'core' | 'lead' }, { count: 'exact' })
     .eq('id', id)
+  if (error || count === 0) console.error('[athar] setMembershipRole failed', { error, count, id })
   revalidatePath('/', 'layout')
 }
 
@@ -160,7 +168,11 @@ export async function removeMembership(formData: FormData) {
   const id = String(formData.get('id') ?? '')
   if (!id) return
   const supabase = await createClient()
-  await supabase.from('forum_memberships').update({ status: 'removed' }).eq('id', id)
+  const { error, count } = await supabase
+    .from('forum_memberships')
+    .update({ status: 'removed' }, { count: 'exact' })
+    .eq('id', id)
+  if (error || count === 0) console.error('[athar] removeMembership failed', { error, count, id })
   revalidatePath('/', 'layout')
 }
 
@@ -280,7 +292,8 @@ export async function deleteEvent(formData: FormData) {
   const id = String(formData.get('id') ?? '')
   if (!id) return
   const supabase = await createClient()
-  await supabase.from('events').delete().eq('id', id)
+  const { error } = await supabase.from('events').delete().eq('id', id)
+  if (error) console.error('[athar] deleteEvent failed', error)
   revalidatePath('/', 'layout')
 }
 
@@ -329,13 +342,12 @@ export async function savePost(_prev: AdminState, formData: FormData): Promise<A
           ? new Date(d.published_at).toISOString()
           : new Date().toISOString()
         : null,
-    author_id: profileId,
   }
 
   const supabase = await createClient()
   const { error } = d.id
     ? await supabase.from('posts').update(payload).eq('id', d.id)
-    : await supabase.from('posts').insert(payload)
+    : await supabase.from('posts').insert({ ...payload, author_id: profileId })
 
   if (error) {
     return { status: 'error', message: error.code === '23505' ? 'duplicate-slug' : error.message }
@@ -350,6 +362,7 @@ export async function deletePost(formData: FormData) {
   const id = String(formData.get('id') ?? '')
   if (!id) return
   const supabase = await createClient()
-  await supabase.from('posts').delete().eq('id', id)
+  const { error } = await supabase.from('posts').delete().eq('id', id)
+  if (error) console.error('[athar] deletePost failed', error)
   revalidatePath('/', 'layout')
 }
