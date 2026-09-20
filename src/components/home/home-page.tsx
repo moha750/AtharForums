@@ -49,7 +49,7 @@ export async function HomePage({
           <Badge tone="teal">{t('heroBadge', { ministry: tMeta('ministry') })}</Badge>
 
           <h1 className="mx-auto mt-6 max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
-            <span className="text-athar-gradient">{tMeta('tagline')}</span>
+            <span className="text-athar-gradient">{tMeta('hook')}</span>
           </h1>
 
           <p className="mx-auto mt-5 max-w-2xl text-pretty leading-relaxed text-[var(--fg-muted)] sm:text-lg">

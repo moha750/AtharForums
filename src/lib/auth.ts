@@ -8,7 +8,8 @@ import type { Profile } from '@/lib/database.types'
  * cache() يمنع تكرار الاستعلام داخل الطلب الواحد.
  */
 export const getCurrentProfile = cache(async (): Promise<Profile | null> => {
-  if (previewMode) return fixtureProfile
+  // في المعاينة: مشرف افتراضي إلا إن طُلب زائر غير مسجَّل (لمعاينة الصفحة التشويقية)
+  if (previewMode) return process.env.ATHAR_PREVIEW_ANON === '1' ? null : fixtureProfile
   const supabase = await createClient()
   const {
     data: { user },

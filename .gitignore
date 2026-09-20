@@ -13,3 +13,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .next-docs/
+
+# ملفات نقل مؤقتة
+.athar-*.tgz
+"Ministry logo.svg"

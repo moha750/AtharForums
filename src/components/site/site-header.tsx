@@ -3,6 +3,7 @@ import { LayoutDashboard, LogIn, Settings2 } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
+import { MinistryLogo } from '@/components/ministry-logo'
 import { LocaleSwitcher } from '@/components/site/locale-switcher'
 import { MobileNav } from '@/components/site/mobile-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -58,6 +59,11 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
         </nav>
 
         <div className="ms-auto flex items-center gap-1">
+          <MinistryLogo
+            variant="symbol"
+            className="me-2 hidden h-8 border-e border-[var(--border)] pe-3 sm:inline-block"
+            alt={tMeta('ministry')}
+          />
           <LocaleSwitcher current={locale} />
           <ThemeToggle labels={themeLabels} />
 

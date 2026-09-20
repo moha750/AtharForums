@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { Compass, Sparkles, Users } from 'lucide-react'
 
 import { Logo } from '@/components/logo'
+import { MinistryLogo } from '@/components/ministry-logo'
 import { Badge } from '@/components/ui/badge'
 import { Countdown } from '@/components/teaser/countdown'
 import { WaitlistForm } from '@/components/teaser/waitlist-form'
@@ -49,10 +50,8 @@ export async function TeaserPage({
         <div className="absolute -bottom-40 -start-24 size-[28rem] rounded-full bg-sage-300/30 blur-3xl dark:bg-sage-800/15" />
       </div>
 
-      <header className="container-athar flex items-center justify-between py-5">
-        <span className="text-xs font-medium tracking-wide text-[var(--fg-subtle)]">
-          {tMeta('ministry')}
-        </span>
+      <header className="container-athar flex items-center justify-between gap-4 py-5">
+        <MinistryLogo className="h-12 sm:h-16" alt={tMeta('ministry')} priority />
         <div className="flex items-center gap-0.5">
           <LocaleSwitcher current={locale} />
           <ThemeToggle labels={themeLabels} />
@@ -68,7 +67,7 @@ export async function TeaserPage({
         </Badge>
 
         <h1 className="mt-6 text-balance text-3xl font-bold sm:text-5xl">
-          <span className="text-athar-gradient">{tMeta('tagline')}</span>
+          <span className="text-athar-gradient">{tMeta('hook')}</span>
         </h1>
 
         <p className="mt-5 max-w-xl text-pretty text-[0.975rem] leading-relaxed text-[var(--fg-muted)] sm:text-lg">

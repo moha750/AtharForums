@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
+import { MinistryLogo } from '@/components/ministry-logo'
 import type { PublicSettings } from '@/lib/database.types'
 
 export async function SiteFooter({ settings }: { settings: PublicSettings }) {
@@ -18,8 +19,11 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
   return (
     <footer className="mt-20 border-t border-[var(--border)] bg-[var(--bg-subtle)]">
       <div className="container-athar grid gap-8 py-10 sm:grid-cols-[1.4fr_1fr]">
-        <div className="space-y-3">
-          <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-end gap-5">
+            <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
+            <MinistryLogo className="h-16" alt={tMeta('ministry')} />
+          </div>
           <p className="max-w-sm text-sm leading-relaxed text-[var(--fg-muted)]">
             {tMeta('description')}
           </p>

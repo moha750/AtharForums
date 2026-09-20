@@ -20,7 +20,7 @@ export const previewMode = process.env.ATHAR_PREVIEW_FIXTURES === '1'
 
 export const fixtureSettings: PublicSettings = {
   launch_at: '2026-09-27T09:00:00Z',
-  teaser_mode: false,
+  teaser_mode: process.env.ATHAR_PREVIEW_TEASER === '1',
   registration_open: true,
   allowed_email_domains: ['hrsd.gov.sa'],
   site_name_ar: 'منتديات أثر',
