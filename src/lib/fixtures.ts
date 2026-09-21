@@ -28,9 +28,9 @@ export const fixtureSettings: PublicSettings = {
   tagline_ar: 'منتديات تواصل .. تصنع أثراً',
   tagline_en: 'Forums that connect, and leave a mark',
   about_ar:
-    'منتديات أثر مبادرة من وزارة الموارد البشرية والتنمية الاجتماعية تجمع منسوبي الوزارة حول ما يجيدونه وما يحبّونه. كل منتدى مساحة يقودها الموظفون أنفسهم.',
+    'منتديات أثر مبادرة من فرع وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية، تجمع منسوبي الفرع حول ما يجيدونه وما يحبّونه. كل منتدى مساحة يقودها الموظفون أنفسهم.',
   about_en:
-    'Athar Forums is an initiative by the Ministry of Human Resources and Social Development bringing employees together around what they are good at and what they love.',
+    'Athar Forums is an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love.',
   contact_email: 'athar@hrsd.gov.sa',
 }
 

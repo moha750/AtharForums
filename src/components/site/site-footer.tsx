@@ -22,7 +22,7 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
         <div className="space-y-4">
           <div className="flex flex-wrap items-end gap-5">
             <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
-            <MinistryLogo className="h-16" alt={tMeta('ministry')} />
+            <MinistryLogo className="h-16" alt={tMeta('branch')} />
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-[var(--fg-muted)]">
             {tMeta('description')}

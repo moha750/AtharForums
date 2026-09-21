@@ -62,7 +62,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
           <MinistryLogo
             variant="symbol"
             className="me-2 hidden h-8 border-e border-[var(--border)] pe-3 sm:inline-block"
-            alt={tMeta('ministry')}
+            alt={tMeta('branch')}
           />
           <LocaleSwitcher current={locale} />
           <ThemeToggle labels={themeLabels} />

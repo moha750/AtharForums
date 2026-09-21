@@ -46,7 +46,7 @@ export async function HomePage({
         </div>
 
         <div className="container-athar py-16 text-center sm:py-24">
-          <Badge tone="teal">{t('heroBadge', { ministry: tMeta('ministry') })}</Badge>
+          <Badge tone="teal">{t('heroBadge', { branch: tMeta('branchShort') })}</Badge>
 
           <h1 className="mx-auto mt-6 max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
             <span className="text-athar-gradient">{tMeta('hook')}</span>

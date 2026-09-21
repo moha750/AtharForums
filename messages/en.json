@@ -3,8 +3,10 @@
     "siteName": "Athar Forums",
     "tagline": "Forums that connect, and leave a mark",
     "ministry": "Ministry of Human Resources and Social Development",
-    "description": "The official platform for Athar Forums — a space bringing Ministry of Human Resources and Social Development employees together around what they are good at and what they love.",
-    "hook": "Where the story begins, and the mark is made"
+    "description": "The official platform for Athar Forums — an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love.",
+    "hook": "Where the story begins, and the mark is made",
+    "branch": "Eastern Region Branch, Ministry of Human Resources and Social Development",
+    "branchShort": "Eastern Region Branch"
   },
   "nav": {
     "home": "Home",
@@ -61,7 +63,7 @@
     }
   },
   "home": {
-    "heroBadge": "An initiative by the {ministry}",
+    "heroBadge": "An initiative by the {branch}",
     "heroCta": "Browse forums",
     "heroCtaSecondary": "About Athar",
     "statsForums": "forums",
@@ -147,7 +149,7 @@
   },
   "footer": {
     "rights": "All rights reserved",
-    "ministryFull": "Ministry of Human Resources and Social Development",
+    "ministryFull": "Eastern Region Branch, Ministry of Human Resources and Social Development",
     "contact": "Contact us"
   },
   "events": {

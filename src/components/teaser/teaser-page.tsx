@@ -51,7 +51,7 @@ export async function TeaserPage({
       </div>
 
       <header className="container-athar flex items-center justify-between gap-4 py-5">
-        <MinistryLogo className="h-12 sm:h-16" alt={tMeta('ministry')} priority />
+        <MinistryLogo className="h-12 sm:h-16" alt={tMeta('branch')} priority />
         <div className="flex items-center gap-0.5">
           <LocaleSwitcher current={locale} />
           <ThemeToggle labels={themeLabels} />

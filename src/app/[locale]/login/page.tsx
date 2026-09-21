@@ -52,7 +52,7 @@ export default async function LoginPage({
             </p>
           </div>
 
-          <LoginForm next={next} ministry={tMeta('ministry')} linkError={error === 'link'} />
+          <LoginForm next={next} ministry={tMeta('branch')} linkError={error === 'link'} />
         </div>
       </div>
     </main>
