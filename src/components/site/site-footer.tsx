@@ -21,8 +21,9 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
       <div className="container-athar grid gap-8 py-10 sm:grid-cols-[1.4fr_1fr]">
         <div className="space-y-4">
           <div className="flex flex-wrap items-end gap-5">
-            <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
+            {/* قاعدة الهوية: إذا اجتمع الشعاران في صفّ واحد تقدّم الوزارة ثم أثر. */}
             <MinistryLogo className="h-16" alt={tMeta('branch')} />
+            <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-[var(--fg-muted)]">
             {tMeta('description')}
