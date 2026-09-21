@@ -3,6 +3,8 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { trackConversion } from '@/lib/analytics/server'
+import { CONVERSIONS } from '@/lib/analytics/record'
 
 export type JoinState = {
   status: 'idle' | 'success' | 'error'
@@ -86,6 +88,8 @@ export async function applyToForum(_prev: JoinState, formData: FormData): Promis
       return { status: 'error', message }
     }
   }
+
+  await trackConversion(CONVERSIONS.joinRequest, { entityId: parsed.data.forumId })
 
   revalidatePath('/', 'layout')
   return { status: 'success' }

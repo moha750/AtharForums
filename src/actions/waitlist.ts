@@ -3,6 +3,8 @@
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { getPublicSettings } from '@/lib/settings'
+import { trackConversion } from '@/lib/analytics/server'
+import { CONVERSIONS } from '@/lib/analytics/record'
 import { isAllowedDomain } from '@/lib/utils'
 
 export type WaitlistState = {
@@ -50,6 +52,8 @@ export async function joinWaitlist(
     if (error) {
       return { status: 'error', key: 'errorGeneric' }
     }
+
+    await trackConversion(CONVERSIONS.waitlistSignup)
 
     return { status: 'success', key: 'success' }
   } catch {

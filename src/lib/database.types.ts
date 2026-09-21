@@ -12,6 +12,95 @@ export type ForumColor = 'teal' | 'sage' | 'ember'
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
+// ── الإحصاءات ──────────────────────────────────────────────────────────────
+
+export type AnalyticsDevice = 'desktop' | 'mobile' | 'tablet' | 'bot' | 'unknown'
+export type AnalyticsKind = 'pageview' | 'engagement' | 'conversion'
+
+export type AnalyticsKpis = {
+  visitors: number
+  visits: number
+  pageviews: number
+  bounces?: number
+  bounce_rate: number
+  avg_duration_s: number
+  views_per_visit?: number
+  returning?: number
+  returning_rate?: number
+  identified?: number
+  conversions: number
+  conversion_rate?: number
+  bots?: number
+}
+
+export type AnalyticsOverview = {
+  current: AnalyticsKpis
+  previous: AnalyticsKpis
+}
+
+export type AnalyticsPoint = {
+  bucket: string
+  visitors: number
+  visits: number
+  pageviews: number
+  conversions: number
+}
+
+export type AnalyticsRow = {
+  label: string
+  visits: number
+  pageviews: number
+  visitors: number
+  share: number
+}
+
+export type AnalyticsRealtime = {
+  active_visitors: number
+  views_last_hour: number
+  top_now: Array<{ path: string; views: number }>
+  minutes: Array<{ minute: string; views: number }>
+}
+
+export type AnalyticsFunnels = {
+  overall: Array<{ name: string; completions: number; visits: number }>
+  teaser: { views: number; signups: number; rate: number }
+  forums: Array<{
+    slug: string
+    name_ar: string
+    name_en: string | null
+    views: number
+    requests: number
+  }>
+  events: Array<{
+    slug: string
+    title_ar: string
+    title_en: string | null
+    views: number
+    registrations: number
+  }>
+  login: { views: number; requested: number; rate: number }
+}
+
+export type AnalyticsPerson = {
+  profile_id: string
+  full_name: string
+  email: string
+  visits: number
+  pageviews: number
+  last_seen: string
+}
+
+export type AnalyticsPersonEvent = {
+  occurred_at: string
+  path: string
+  page_type: string
+  locale: string | null
+  device: string
+  duration_ms: number | null
+}
+
+
+
 export type SiteSettings = {
   id: boolean
   launch_at: string
@@ -242,6 +331,38 @@ export type Database = {
           subscriber_source?: string
         }
         Returns: undefined
+      }
+      analytics_overview: {
+        Args: { p_from: string; p_to: string }
+        Returns: Json
+      }
+      analytics_timeseries: {
+        Args: { p_from: string; p_to: string; p_bucket?: string }
+        Returns: AnalyticsPoint[]
+      }
+      analytics_breakdown: {
+        Args: { p_from: string; p_to: string; p_dimension: string; p_limit?: number }
+        Returns: AnalyticsRow[]
+      }
+      analytics_realtime: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      analytics_funnels: {
+        Args: { p_from: string; p_to: string }
+        Returns: Json
+      }
+      analytics_people: {
+        Args: { p_from: string; p_to: string; p_limit?: number }
+        Returns: AnalyticsPerson[]
+      }
+      analytics_person: {
+        Args: { p_profile_id: string; p_from: string; p_to: string; p_limit?: number }
+        Returns: AnalyticsPersonEvent[]
+      }
+      analytics_prune: {
+        Args: { p_retain_days?: number }
+        Returns: Json
       }
     }
     Enums: {

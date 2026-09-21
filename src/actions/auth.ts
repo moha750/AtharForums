@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { headers } from 'next/headers'
 import { createClient } from '@/lib/supabase/server'
 import { getPublicSettings } from '@/lib/settings'
+import { trackConversion } from '@/lib/analytics/server'
+import { CONVERSIONS } from '@/lib/analytics/record'
 import { isAllowedDomain } from '@/lib/utils'
 import { siteUrl } from '@/lib/env'
 
@@ -82,6 +84,8 @@ export async function requestMagicLink(
       }
       return { status: 'error', key: 'errorGeneric', domains }
     }
+
+    await trackConversion(CONVERSIONS.magicLinkRequested)
 
     return { status: 'sent', email: parsed.data.email }
   } catch {

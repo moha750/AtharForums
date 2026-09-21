@@ -3,6 +3,8 @@
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { trackConversion } from '@/lib/analytics/server'
+import { CONVERSIONS } from '@/lib/analytics/record'
 
 const schema = z.object({ eventId: z.string().uuid(), slug: z.string().min(1).max(120) })
 
@@ -26,7 +28,11 @@ export async function registerForEvent(formData: FormData) {
       { onConflict: 'event_id,profile_id' }
     )
 
-  if (error) console.error('[athar] registerForEvent failed', error)
+  if (error) {
+    console.error('[athar] registerForEvent failed', error)
+  } else {
+    await trackConversion(CONVERSIONS.eventRegistration, { entityId: parsed.data.eventId })
+  }
 
   revalidatePath('/', 'layout')
 }

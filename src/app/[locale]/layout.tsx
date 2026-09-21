@@ -13,6 +13,8 @@ import '../globals.css'
 
 import { routing, isLocale, localeDirection, type Locale } from '@/i18n/routing'
 import { themeBootstrapScript } from '@/components/theme-toggle'
+import { EngagementBeacon } from '@/components/analytics/engagement-beacon'
+import { analyticsEnabled } from '@/lib/analytics/record'
 import { siteUrl } from '@/lib/env'
 
 export function generateStaticParams() {
@@ -80,6 +82,7 @@ export default async function LocaleLayout({
       </head>
       <body className="min-h-dvh bg-[var(--bg)] text-[var(--fg)] antialiased">
         <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        {analyticsEnabled ? <EngagementBeacon /> : null}
       </body>
     </html>
   )

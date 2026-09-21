@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  BarChart3,
   CalendarDays,
   LayoutGrid,
   Mail,
@@ -23,6 +24,7 @@ const ICONS = {
   events: CalendarDays,
   news: Newspaper,
   waitlist: Mail,
+  analytics: BarChart3,
   settings: Settings,
 } as const
 

@@ -82,6 +82,13 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
             <div className="mt-5 rounded-2xl bg-[var(--surface)] p-5 ring-1 ring-[var(--border)] sm:p-6">
               <ProfileForm profile={profile} />
             </div>
+
+            {/* إفصاح ظاهر لا مدفون في سياسة طويلة: الموظّف يقرأ ما يُسجَّل عنه
+                في الصفحة التي يفتحها أصلًا، لا في رابط لا ينقره أحد. */}
+            <details className="mt-4 rounded-2xl bg-[var(--bg-subtle)] p-4 text-sm ring-1 ring-[var(--border)]">
+              <summary className="cursor-pointer font-medium">{t('privacyTitle')}</summary>
+              <p className="mt-2 leading-relaxed text-[var(--fg-muted)]">{t('privacyBody')}</p>
+            </details>
           </section>
 
           <aside className="space-y-8">

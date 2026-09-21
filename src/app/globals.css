@@ -115,6 +115,8 @@
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
   --color-success: var(--success);
   --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
@@ -141,6 +143,12 @@
   --accent: #f7941d;
   --accent-fg: #3d2205;
   --accent-soft: #fff6e8;
+
+  /* ألوان الرسوم البيانية — مُتحقَّق منها لعمى الألوان وللتباين مع السطح.
+     لا تُبدَّل بالذوق: أي تغيير يُعاد فحصه، وإلا صار خطّان لا يفترقان
+     في عين من لا يميّز الأحمر من الأخضر. */
+  --chart-1: #0d9aa8;
+  --chart-2: #e0710d;
   --success: #067a5c;
   --success-soft: #e8f7f1;
   --warning: #9a6206;
@@ -170,6 +178,9 @@
     --accent: #fcb614;
     --accent-fg: #2a1a01;
     --accent-soft: #2a2008;
+
+    --chart-1: #0f97a6;
+    --chart-2: #cf7f14;
     --success: #4dc79e;
     --success-soft: #0d2820;
     --warning: #f0b429;
@@ -198,6 +209,8 @@
   --primary-soft: #0f2a2f;
   --accent: #fcb614;
   --accent-fg: #2a1a01;
+  --chart-1: #0f97a6;
+  --chart-2: #cf7f14;
   --accent-soft: #2a2008;
   --success: #4dc79e;
   --success-soft: #0d2820;
