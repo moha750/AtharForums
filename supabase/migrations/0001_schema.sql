@@ -1,5 +1,5 @@
 -- ════════════════════════════════════════════════════════════════════════════
--- منتديات أثر — المخطّط الأساسي
+-- مساحة أثر — المخطّط الأساسي
 -- وزارة الموارد البشرية والتنمية الاجتماعية
 -- ════════════════════════════════════════════════════════════════════════════
 
@@ -56,10 +56,10 @@ create table if not exists public.site_settings (
   bootstrap_admin_emails text[] not null default array['admin@hrsd.gov.sa'],
 
   -- الهوية
-  site_name_ar text not null default 'منتديات أثر',
-  site_name_en text not null default 'Athar Forums',
-  tagline_ar text not null default 'منتديات تواصل .. تصنع أثراً',
-  tagline_en text not null default 'Forums that connect, and leave a mark',
+  site_name_ar text not null default 'مساحة أثر',
+  site_name_en text not null default 'Athar Space',
+  tagline_ar text not null default 'تواصل .. معرفة .. أثر',
+  tagline_en text not null default 'Connection · Knowledge · Impact',
   about_ar text,
   about_en text,
   contact_email text,

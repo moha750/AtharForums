@@ -9,11 +9,11 @@ type Props = {
 }
 
 /**
- * شعار منتديات أثر.
+ * شعار مساحة أثر.
  * نعرض نسختين — فاتحة وداكنة — ونبدّل بينهما بالـ CSS لا بالجافاسكربت،
  * حتى لا يومض الشعار عند تحميل الصفحة في الوضع الداكن.
  */
-export function Logo({ variant = 'full', className, priority, alt = 'منتديات أثر' }: Props) {
+export function Logo({ variant = 'full', className, priority, alt = 'مساحة أثر' }: Props) {
   const light = variant === 'full' ? '/athar-logo.svg' : '/athar-mark.svg'
   const dark = variant === 'full' ? '/athar-logo-dark.svg' : '/athar-mark-dark.svg'
   const ratio = variant === 'full' ? { width: 1006, height: 1080 } : { width: 1006, height: 560 }

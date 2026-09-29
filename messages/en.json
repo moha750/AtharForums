@@ -1,9 +1,9 @@
 {
   "meta": {
-    "siteName": "Athar Forums",
-    "tagline": "Forums that connect, and leave a mark",
+    "siteName": "Athar Space",
+    "tagline": "Connection · Knowledge · Impact",
     "ministry": "Ministry of Human Resources and Social Development",
-    "description": "The official platform for Athar Forums — an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love.",
+    "description": "The official platform for Athar Space — an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love.",
     "hook": "Where the story begins, and the mark is made",
     "branch": "Eastern Region Branch, Ministry of Human Resources and Social Development",
     "branchShort": "Eastern Region Branch"
@@ -24,7 +24,7 @@
   },
   "teaser": {
     "badge": "Coming soon",
-    "heading": "Athar Forums",
+    "heading": "Athar Space",
     "lead": "A space bringing Ministry employees together around what they are good at and what they love. Pick your forum, meet people who share the passion, and leave a mark beyond your desk.",
     "launchLabel": "Launching in",
     "launchedLabel": "We are live",
@@ -183,7 +183,7 @@
     "relatedForum": "From"
   },
   "about": {
-    "heading": "About Athar Forums",
+    "heading": "About Athar Space",
     "missionHeading": "Why Athar",
     "howHeading": "How it works",
     "howOne": "The Athar team creates the forums and defines their focus.",

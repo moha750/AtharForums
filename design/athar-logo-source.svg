@@ -1,149 +1,195 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1254 1254">
-  
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1254 1254"><metadata><?xpacket begin="" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 6.0.0"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description rdf:about="" xmlns:xmp="http://ns.adobe.com/xap/1.0/" xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmpMM:DocumentID="xmp.did:cb9f5498-bb58-4572-8043-8c369e6bfb9b" xmpMM:InstanceID="xmp.iid:cb9f5498-bb58-4572-8043-8c369e6bfb9b" dcterms:provenance="https://cai-manifests.adobe.com/manifests/urn-c2pa-63e04142-c0f1-4f62-aa4d-ff6674fd6ef9-adobe"> </rdf:Description></rdf:RDF></x:xmpmeta>
+<?xpacket end="w"?></metadata>
+  <!-- Generator: Adobe Illustrator 30.8.2, SVG Export Plug-In . SVG Version: 2.1.4 Build 7)  -->
   <defs>
     <style>
       .st0 {
-        fill: #26796e;
+        fill: #144e46;
       }
+
       .st1 {
         fill: #428c72;
       }
+
       .st2 {
         fill: #3d866e;
       }
+
       .st3 {
         fill: #c59237;
       }
+
       .st4 {
-        fill: #24796c;
+        fill: #144f46;
       }
+
       .st5 {
-        fill: #27786e;
+        fill: #124b44;
       }
+
       .st6 {
         fill: #c39136;
       }
+
       .st7 {
-        fill: #0b7a6b;
+        fill: #10564b;
       }
+
       .st8 {
         fill: #c48f35;
       }
+
       .st9 {
-        fill: #017b6a;
+        fill: #125a4e;
       }
+
       .st10 {
         fill: #d8a944;
       }
+
       .st11 {
-        fill: #0b7a6c;
+        fill: #10564c;
       }
+
       .st12 {
-        fill: #1b7b6c;
+        fill: #105147;
       }
+
       .st13 {
-        fill: #31796d;
+        fill: #15473f;
       }
+
       .st14 {
-        fill: #147a6c;
+        fill: #0f5349;
       }
+
       .st15 {
-        fill: #147b6b;
+        fill: #0f5348;
       }
+
       .st16 {
         fill: #408a70;
       }
+
       .st17 {
         fill: #c59138;
       }
+
       .st18 {
-        fill: #2b796a;
+        fill: #154b41;
       }
+
       .st19 {
-        fill: #187a6b;
+        fill: #135449;
       }
+
       .st20 {
         fill: #3d886f;
       }
+
       .st21 {
-        fill: #22796c;
+        fill: #145047;
       }
+
       .st22 {
-        fill: #167a6c;
+        fill: #105349;
       }
+
       .st23 {
         fill: #3d8870;
       }
+
       .st24 {
-        fill: #30786e;
+        fill: #164942;
       }
+
       .st25 {
         fill: #c39037;
       }
+
       .st26 {
-        fill: #007a6b;
+        fill: #166156;
       }
+
       .st27 {
-        fill: #007a6a;
+        fill: #156256;
       }
+
       .st28 {
-        fill: #25786e;
+        fill: #134d46;
       }
+
       .st29 {
-        fill: #177a6b;
+        fill: #125449;
       }
+
       .st30 {
         fill: #c39034;
       }
+
       .st31 {
-        fill: #33796d;
+        fill: #16473f;
       }
+
       .st32 {
-        fill: #157a69;
+        fill: #115448;
       }
+
       .st33 {
-        fill: #007b69;
+        fill: #146255;
       }
+
       .st34 {
-        fill: #127a6c;
+        fill: #0e5349;
       }
+
       .st35 {
-        fill: #2b786a;
+        fill: #164c42;
       }
+
       .st36 {
         fill: #3c866f;
       }
+
       .st37 {
-        fill: #157a6c;
+        fill: #13554b;
       }
+
       .st38 {
         fill: #c39135;
       }
+
       .st39 {
-        fill: #29786f;
+        fill: #154c46;
       }
+
       .st40 {
         fill: #c39233;
       }
+
       .st41 {
-        fill: #007b69;
+        fill: #135d50;
       }
+
       .st42 {
-        fill: #1d7a6b;
+        fill: #145348;
       }
+
       .st43 {
         fill: #c69338;
       }
+
       .st44 {
-        fill: #2c786a;
+        fill: #13483f;
       }
+
       .st45 {
-        fill: #22796c;
+        fill: #165148;
       }
+
       .st46 {
-        fill: #37776b;
+        fill: #1a473f;
       }
     </style>
   </defs>

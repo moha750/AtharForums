@@ -25,7 +25,7 @@ Supabase ← Project Settings ← Authentication ← SMTP Settings
 | الحقل | القيمة |
 |---|---|
 | Sender email | `no-reply@hrsd.gov.sa` |
-| Sender name | منتديات أثر |
+| Sender name | مساحة أثر |
 | Host / Port / Username / Password | من تقنية المعلومات في الوزارة |
 
 **الأفضل هو مُرحّل بريد الوزارة الداخلي**: الرسائل تأتي من نطاق موثوق فلا

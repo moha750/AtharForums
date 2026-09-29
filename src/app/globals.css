@@ -15,50 +15,53 @@
 /* ══════════════════════════════════════════════════════════════════════════
    منتديات أثر — نظام التصميم
    الألوان مستخرجة من شعار منتديات أثر وهوية وزارة الموارد البشرية والتنمية
-   الاجتماعية: الفيروزي العميق أساسًا، والأخضر ثانويًا، والبرتقالي/الذهبي لمسة.
+   مساحة أثر: الأخضر العميق أساسًا، والأخضر المتوسط ثانويًا، والذهبي لمسة.
    ══════════════════════════════════════════════════════════════════════════ */
 
 @theme {
-  /* ── الفيروزي (اللون الأساسي) ─────────────────────────────────────────── */
-  --color-teal-50:  #eff9fa;
-  --color-teal-100: #d7f0f2;
-  --color-teal-200: #b3e2e7;
-  --color-teal-300: #7fccd6;
-  --color-teal-400: #44adbd;
-  --color-teal-500: #158285;
-  --color-teal-600: #027c7c;
-  --color-teal-700: #026571;
-  --color-teal-800: #06525c;
-  --color-teal-900: #0a444e;
-  --color-teal-950: #032b33;
+  /* ── الأخضر العميق (اللون الأساسي) — مرساته #144e46 من الشعار ─────────
+     الأسماء teal/sage/ember بقيت كما هي عمدًا: عمود forums.color في قاعدة
+     البيانات مقيَّد بـ check على هذه القيم الثلاث، وتبديل الأسماء يوجب
+     ترحيلًا لا داعي له. اقرأها خانات دلالية لا أسماء ألوان. */
+  --color-teal-50:  #edfaf7;
+  --color-teal-100: #deefeb;
+  --color-teal-200: #c6ded9;
+  --color-teal-300: #a2c6bf;
+  --color-teal-400: #72a99f;
+  --color-teal-500: #487e75;
+  --color-teal-600: #41786f;
+  --color-teal-700: #2d645c;
+  --color-teal-800: #144e46;
+  --color-teal-900: #09463f;
+  --color-teal-950: #002d27;
 
-  /* ── الأخضر (ثانوي) ───────────────────────────────────────────────────── */
-  --color-sage-50:  #ebfcf6;
-  --color-sage-100: #cdf7e9;
-  --color-sage-200: #9fedd6;
-  --color-sage-300: #63ddbe;
-  --color-sage-400: #2bb574;
-  --color-sage-500: #00a992;
-  --color-sage-600: #009a8e;
-  --color-sage-700: #027c73;
-  --color-sage-800: #05625c;
-  --color-sage-900: #06514c;
-  --color-sage-950: #01312f;
+  /* ── الأخضر المتوسط (ثانوي) — مرساته #3d866e ──────────────────────────── */
+  --color-sage-50:  #e2fff4;
+  --color-sage-100: #bdfce4;
+  --color-sage-200: #a3edd1;
+  --color-sage-300: #8cd6bb;
+  --color-sage-400: #63ab91;
+  --color-sage-500: #5aa289;
+  --color-sage-600: #4d957d;
+  --color-sage-700: #3d866e;
+  --color-sage-800: #12634d;
+  --color-sage-900: #04533f;
+  --color-sage-950: #003225;
 
-  /* ── البرتقالي/الذهبي (لمسة) ──────────────────────────────────────────── */
-  --color-ember-50:  #fff9ec;
-  --color-ember-100: #fff2d3;
-  --color-ember-200: #ffe1a5;
-  --color-ember-300: #fecb6d;
-  --color-ember-400: #fcb614;
-  --color-ember-500: #f7941d;
-  --color-ember-600: #e0710d;
-  --color-ember-700: #ba520e;
-  --color-ember-800: #974012;
-  --color-ember-900: #7c3612;
-  --color-ember-950: #471a05;
+  /* ── الذهبي (لمسة) — مرساته #c59237 ───────────────────────────────────── */
+  --color-ember-50:  #fff9ee;
+  --color-ember-100: #fff1db;
+  --color-ember-200: #ffe0af;
+  --color-ember-300: #ffca72;
+  --color-ember-400: #efba62;
+  --color-ember-500: #d9a54c;
+  --color-ember-600: #c59237;
+  --color-ember-700: #9a6b05;
+  --color-ember-800: #7c5601;
+  --color-ember-900: #674702;
+  --color-ember-950: #392500;
 
-  /* ── الرمادي المحايد (مائل قليلًا للفيروزي ليتناغم مع الهوية) ─────────── */
+  /* ── الرمادي المحايد (مائل قليلًا للأخضر ليتناغم مع الهوية) ──────────── */
   --color-ink-50:  #f6f8f8;
   --color-ink-100: #eceff0;
   --color-ink-200: #d5dcdd;
@@ -86,9 +89,9 @@
   --radius-2xl: 1.75rem;
 
   /* ── الظلال ───────────────────────────────────────────────────────────── */
-  --shadow-soft: 0 1px 2px rgb(2 101 113 / 0.04), 0 8px 24px -12px rgb(2 101 113 / 0.18);
-  --shadow-lift: 0 2px 4px rgb(2 101 113 / 0.05), 0 16px 40px -16px rgb(2 101 113 / 0.26);
-  --shadow-ring: 0 0 0 1px rgb(2 101 113 / 0.08);
+  --shadow-soft: 0 1px 2px rgb(20 78 70 / 0.05), 0 8px 24px -12px rgb(20 78 70 / 0.20);
+  --shadow-lift: 0 2px 4px rgb(20 78 70 / 0.06), 0 16px 40px -16px rgb(20 78 70 / 0.28);
+  --shadow-ring: 0 0 0 1px rgb(20 78 70 / 0.09);
 
   /* ── الحركة ───────────────────────────────────────────────────────────── */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -136,26 +139,26 @@
   --fg-subtle: #6a7d81;
   --border: #e2e9ea;
   --border-strong: #cbd8da;
-  --primary: #026571;
-  --primary-hover: #024c55;
+  --primary: #144e46;
+  --primary-hover: #09463f;
   --primary-fg: #ffffff;
-  --primary-soft: #eff9fa;
-  --accent: #f7941d;
-  --accent-fg: #3d2205;
-  --accent-soft: #fff6e8;
+  --primary-soft: #edfaf7;
+  --accent: #c59237;
+  --accent-fg: #2f2100;
+  --accent-soft: #fff9ee;
 
   /* ألوان الرسوم البيانية — مُتحقَّق منها لعمى الألوان وللتباين مع السطح.
      لا تُبدَّل بالذوق: أي تغيير يُعاد فحصه، وإلا صار خطّان لا يفترقان
      في عين من لا يميّز الأحمر من الأخضر. */
-  --chart-1: #0d9aa8;
-  --chart-2: #e0710d;
+  --chart-1: #008f7f;
+  --chart-2: #a77612;
   --success: #067a5c;
   --success-soft: #e8f7f1;
-  --warning: #9a6206;
+  --warning: #8a6208;
   --warning-soft: #fff5e3;
   --danger: #b3261e;
   --danger-soft: #fdeceb;
-  --ring: #158285;
+  --ring: #2d645c;
 
   color-scheme: light;
 }
@@ -171,23 +174,23 @@
     --fg-subtle: #7f9296;
     --border: #23353a;
     --border-strong: #32484e;
-    --primary: #3fb2bd;
-    --primary-hover: #63c7d0;
-    --primary-fg: #04232a;
-    --primary-soft: #0f2a2f;
-    --accent: #fcb614;
-    --accent-fg: #2a1a01;
-    --accent-soft: #2a2008;
+    --primary: #63ab91;
+    --primary-hover: #8cd6bb;
+    --primary-fg: #05231d;
+    --primary-soft: #102a24;
+    --accent: #d9a54c;
+    --accent-fg: #241900;
+    --accent-soft: #2a2109;
 
-    --chart-1: #0f97a6;
-    --chart-2: #cf7f14;
+    --chart-1: #008f7f;
+    --chart-2: #a77612;
     --success: #4dc79e;
     --success-soft: #0d2820;
-    --warning: #f0b429;
+    --warning: #e0b45e;
     --warning-soft: #2c2208;
     --danger: #ff8a80;
     --danger-soft: #331815;
-    --ring: #3fb2bd;
+    --ring: #63ab91;
 
     color-scheme: dark;
   }
@@ -203,22 +206,22 @@
   --fg-subtle: #7f9296;
   --border: #23353a;
   --border-strong: #32484e;
-  --primary: #3fb2bd;
-  --primary-hover: #63c7d0;
-  --primary-fg: #04232a;
-  --primary-soft: #0f2a2f;
-  --accent: #fcb614;
-  --accent-fg: #2a1a01;
-  --chart-1: #0f97a6;
-  --chart-2: #cf7f14;
-  --accent-soft: #2a2008;
+  --primary: #63ab91;
+  --primary-hover: #8cd6bb;
+  --primary-fg: #05231d;
+  --primary-soft: #102a24;
+  --accent: #d9a54c;
+  --accent-fg: #241900;
+  --chart-1: #008f7f;
+  --chart-2: #a77612;
+  --accent-soft: #2a2109;
   --success: #4dc79e;
   --success-soft: #0d2820;
-  --warning: #f0b429;
+  --warning: #e0b45e;
   --warning-soft: #2c2208;
   --danger: #ff8a80;
   --danger-soft: #331815;
-  --ring: #3fb2bd;
+  --ring: #63ab91;
 
   color-scheme: dark;
 }
