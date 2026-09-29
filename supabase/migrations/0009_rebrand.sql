@@ -14,8 +14,8 @@ set
   site_name_en = 'Athar Space',
   tagline_ar   = 'تواصل .. معرفة .. أثر',
   tagline_en   = 'Connection · Knowledge · Impact',
-  about_ar     = 'مساحة أثر مبادرة من فرع وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية، تجمع منسوبي الفرع حول ما يجيدونه وما يحبّونه. كل منتدى حلقة يقودها الموظفون أنفسهم: يتعلّمون فيها، ويبنون، ويتركون أثرًا يتجاوز مكاتبهم.',
-  about_en     = 'Athar Space is an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love. Each forum is a circle led by employees themselves — to learn, to build, and to leave a mark beyond their desks.'
+  about_ar     = 'مساحة أثر تجمع منسوبي وزارة الموارد البشرية والتنمية الاجتماعية حول ما يجيدونه وما يحبّونه. كل مساحة يقودها الموظفون أنفسهم: يتعلّمون فيها، ويبنون، ويتركون أثرًا يتجاوز مكاتبهم.',
+  about_en     = 'Athar Space brings colleagues at the Ministry of Human Resources and Social Development together around what they are good at and what they love. Each space is led by employees themselves — to learn, to build, and to leave a mark beyond their desks.'
 where id;
 
 select site_name_ar, site_name_en, tagline_ar, tagline_en from public.site_settings;

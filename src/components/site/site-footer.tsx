@@ -52,9 +52,12 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
       </div>
 
       <div className="border-t border-[var(--border)]">
-        <p className="container-athar py-5 text-center text-xs text-[var(--fg-subtle)]">
-          © {new Date().getFullYear()} {t('ministryFull')} — {t('rights')}
-        </p>
+        <div className="container-athar space-y-1 py-5 text-center text-xs text-[var(--fg-subtle)]">
+          <p>
+            © {new Date().getFullYear()} {t('ministryFull')} — {t('rights')}
+          </p>
+          <p>{t('credit')}</p>
+        </div>
       </div>
     </footer>
   )

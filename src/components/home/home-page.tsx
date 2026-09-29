@@ -2,7 +2,6 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, ArrowRight, CalendarDays, Newspaper } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
-import { Badge } from '@/components/ui/badge'
 import { buttonStyles } from '@/components/ui/button'
 import { ForumCard } from '@/components/forums/forum-card'
 import {
@@ -46,9 +45,7 @@ export async function HomePage({
         </div>
 
         <div className="container-athar py-16 text-center sm:py-24">
-          <Badge tone="teal">{t('heroBadge', { branch: tMeta('branchShort') })}</Badge>
-
-          <h1 className="mx-auto mt-6 max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
+          <h1 className="mx-auto max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
             <span className="text-athar-gradient">{tMeta('hook')}</span>
           </h1>
 

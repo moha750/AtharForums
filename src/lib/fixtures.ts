@@ -28,9 +28,9 @@ export const fixtureSettings: PublicSettings = {
   tagline_ar: 'تواصل .. معرفة .. أثر',
   tagline_en: 'Connection · Knowledge · Impact',
   about_ar:
-    'مساحة أثر مبادرة من فرع وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية، تجمع منسوبي الفرع حول ما يجيدونه وما يحبّونه. كل منتدى مساحة يقودها الموظفون أنفسهم.',
+    'مساحة أثر تجمع منسوبي الوزارة حول ما يجيدونه وما يحبّونه. كل مساحة يقودها الموظفون أنفسهم.',
   about_en:
-    'Athar Space is an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love.',
+    'Athar Space brings colleagues together around what they are good at and what they love.',
   contact_email: 'athar@hrsd.gov.sa',
 }
 
@@ -205,7 +205,7 @@ export const fixturePosts: Post[] = [
     slug: 'athar-launch',
     title_ar: 'انطلاق مساحة أثر',
     title_en: 'Athar Space is live',
-    excerpt_ar: 'ثمانية منتديات تفتح أبوابها لمنسوبي الوزارة بدءًا من اليوم.',
+    excerpt_ar: 'ثلاث مساحات تفتح أبوابها لمنسوبي الوزارة بدءًا من اليوم.',
     excerpt_en: 'Eight forums open their doors to Ministry employees starting today.',
     body_ar: null,
     body_en: null,
@@ -255,7 +255,7 @@ export const fixtureApplications = [
     role: 'member' as const,
     status: 'pending' as const,
     motivation:
-      'أعمل في الاتصال المؤسسي منذ ثلاث سنوات وأصوّر وأونتج كهواية. أحبّ أن أسخّر ذلك لتغطية فعاليات المنتديات وإنتاج مواد تعرّف بعمل الوزارة.',
+      'أعمل في الاتصال المؤسسي منذ ثلاث سنوات وأصوّر وأونتج كهواية. أحبّ أن أسخّر ذلك لتغطية فعاليات المساحات وإنتاج مواد تعرّف بعمل الوزارة.',
     relevant_skills: ['التصوير', 'المونتاج'],
     applied_at: '2026-09-18T08:00:00Z',
     decided_at: null,

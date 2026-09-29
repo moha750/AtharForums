@@ -16,7 +16,7 @@ set
   registration_open = true,
   allowed_email_domains = array['hrsd.gov.sa'],
   bootstrap_admin_emails = array['admin@hrsd.gov.sa'],
-  about_ar = 'مساحة أثر مبادرة من فرع وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية، تجمع منسوبي الفرع حول ما يجيدونه وما يحبّونه. كل منتدى حلقة يقودها الموظفون أنفسهم: يتعلّمون فيها، ويبنون، ويتركون أثرًا يتجاوز مكاتبهم.',
+  about_ar = 'مساحة أثر تجمع منسوبي وزارة الموارد البشرية والتنمية الاجتماعية حول ما يجيدونه وما يحبّونه. كل مساحة يقودها الموظفون أنفسهم: يتعلّمون فيها، ويبنون، ويتركون أثرًا يتجاوز مكاتبهم.',
   about_en = 'Athar Space is an initiative by the Eastern Region Branch of the Ministry of Human Resources and Social Development, bringing colleagues together around what they are good at and what they love. Each forum is a space led by employees themselves — to learn, to build, and to leave a mark beyond their desks.',
   contact_email = 'athar@hrsd.gov.sa'
 where id;
