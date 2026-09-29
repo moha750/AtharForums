@@ -13,3 +13,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .next-docs/
+
+# مخرجات مولّدات الشعار (تُبنى بأمر واحد، لا تُحفظ)
+design/__pycache__/
+design/hero-logo-preview.html

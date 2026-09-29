@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight, CalendarDays, Newspaper } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { buttonStyles } from '@/components/ui/button'
 import { ForumCard } from '@/components/forums/forum-card'
+import { HeroLogo } from '@/components/home/hero-logo'
 import {
   getPublishedForums,
   getPlatformStats,
@@ -41,10 +42,12 @@ export async function HomePage({
       <section className="relative overflow-hidden border-b border-[var(--border)]">
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
           <div className="bg-athar-grid mask-fade-b absolute inset-0 opacity-50" />
-          <div className="absolute -top-32 start-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-teal-300/25 blur-3xl dark:bg-teal-700/15 rtl:translate-x-1/2" />
+          <div className="absolute -top-32 start-1/2 size-[36rem] -translate-x-1/2 rounded-full bg-[color-mix(in_srgb,var(--primary)_22%,transparent)] blur-3xl rtl:translate-x-1/2" />
         </div>
 
         <div className="container-athar py-16 text-center sm:py-24">
+          <HeroLogo label={tMeta('siteName')} className="mb-8 h-44 sm:mb-10 sm:h-56" />
+
           <h1 className="mx-auto max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
             <span className="text-athar-gradient">{tMeta('hook')}</span>
           </h1>

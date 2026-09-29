@@ -317,20 +317,33 @@
     .container-athar { padding-inline: 2rem; }
   }
 
-  /* تدرّج هوية أثر */
+  /* تدرّج هوية أثر — أخضر إلى ذهبي، من الشعار الجديد.
+     كان فيروزيًّا من الهوية السابقة، وبقي بعدها سهوًا. */
   .bg-athar-gradient {
-    background-image: linear-gradient(135deg, #026571 0%, #027c7c 38%, #009a8e 72%, #2bb574 100%);
+    background-image: linear-gradient(135deg, #0c3f39 0%, #144e46 40%, #16705f 75%, #1d8a72 100%);
   }
 
+  /* تدرّج العناوين: للنصّ الكبير العريض وحده — طرفه الذهبي عند 4.4:1 على
+     الأبيض، فهو يكفي ‎24px‎ فما فوق ولا يكفي نصّ الفقرات. */
   .text-athar-gradient {
-    background-image: linear-gradient(120deg, #026571 0%, #009a8e 55%, #2bb574 100%);
+    background-image: linear-gradient(120deg, #144e46 0%, #12786a 48%, #a77612 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .text-athar-gradient {
+      background-image: linear-gradient(120deg, #63ab91 0%, #4cc0a4 45%, #d9a54c 100%);
+    }
+  }
+
+  :root[data-theme="dark"] .text-athar-gradient {
+    background-image: linear-gradient(120deg, #63ab91 0%, #4cc0a4 45%, #d9a54c 100%);
+  }
+
   .bg-ember-gradient {
-    background-image: linear-gradient(135deg, #fcb614 0%, #f7941d 100%);
+    background-image: linear-gradient(135deg, #d9a54c 0%, #c59237 100%);
   }
 
   /* شبكة خفيفة للخلفيات */
@@ -344,4 +357,130 @@
   .mask-fade-b {
     mask-image: linear-gradient(to bottom, black 55%, transparent 100%);
   }
+
+  /* ── شعار الهيرو: يتشكّل عند كل ظهور ──────────────────────────────────
+     الحركة هنا لا في hero-logo-art.ts المولَّد، فتعمل مع أوّل رسم وبلا
+     جافاسكربت؛ المكوّن يعيد تشغيلها فقط كلّما عاد الشعار إلى مجال الرؤية.
+     ‎both‎ مقصودة: تفضيل تقليل الحركة يختصر المدّة إلى لحظة، فتبقى الحالة
+     الأخيرة — أي الشعار ظاهرًا كاملًا — لا الأولى. */
+  .athar-hero-logo svg {
+    display: block;
+    height: 100%;
+    width: auto;
+    margin-inline: auto;
+  }
+
+  .athar-hero-logo [data-a] {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+
+  /* الدوائر الثلاث أوّلًا، من اليمين إلى اليسار كاتجاه القراءة */
+  .athar-hero-logo [data-a="node"] {
+    animation: athar-pop 0.8s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+    animation-delay: calc(var(--i) * 200ms);
+  }
+
+  /* ثمّ البتلات تتفتّح تباعًا حول مركز كلّ واحدة */
+  .athar-hero-logo [data-a="petal"] {
+    animation: athar-bloom 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(560ms + var(--i) * 85ms);
+  }
+
+  /* ثمّ يرتفع الاسم، ثمّ يظهر السطر السفلي */
+  .athar-hero-logo [data-a="word"] {
+    transform-origin: 50% 100%;
+    animation: athar-rise 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 1850ms;
+  }
+
+  /* السطر السفلي «تواصل .. معرفة .. أثر» يأتي كلمةً كلمة من اليمين:
+     جسم الكلمة يرتفع، ثمّ تهبط عليه نقاطها، ثمّ الفاصل، ثمّ الكلمة التالية.
+     --w رقم الكلمة و--i رقم النقطة داخلها. */
+  .athar-hero-logo [data-a="tl-body"] {
+    animation: athar-line 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(2400ms + var(--w) * 400ms);
+  }
+
+  .athar-hero-logo [data-a="tl-dot"] {
+    animation: athar-dot 0.45s cubic-bezier(0.22, 1.3, 0.36, 1) both;
+    animation-delay: calc(2620ms + var(--w) * 400ms + var(--i) * 60ms);
+  }
+
+  .athar-hero-logo [data-a="tl-sep"] {
+    animation: athar-dot 0.42s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+    animation-delay: calc(2700ms + var(--w) * 400ms);
+  }
+
+  /* المعيَّن يستقرّ أوّلًا ثمّ يمتدّ الخطّان من عنده — لذا يبدأ كلٌّ من
+     حافته الداخلية: --o صفر للخطّ الأيمن ومئة للأيسر. */
+  .athar-hero-logo [data-a="tl-diamond"] {
+    animation: athar-diamond 0.45s cubic-bezier(0.22, 1.3, 0.36, 1) both;
+    animation-delay: 3650ms;
+  }
+
+  .athar-hero-logo [data-a="tl-rule"] {
+    transform-origin: var(--o) 50%;
+    animation: athar-rule 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: 3780ms;
+  }
+
+  /* وهج ذهبيّ يمرّ خلف الرمز مرّة مع بداية التشكّل */
+  .athar-hero-glow {
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    height: 46%;
+    aspect-ratio: 1;
+    translate: -50% 0;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent) 55%, transparent),
+      transparent 68%
+    );
+    filter: blur(26px);
+    animation: athar-glow 2.1s ease-out both;
+  }
+}
+
+@keyframes athar-pop {
+  from { opacity: 0; transform: scale(0.45); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes athar-bloom {
+  from { opacity: 0; transform: scale(0.72) rotate(-5deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes athar-rise {
+  from { opacity: 0; transform: translateY(26px); filter: blur(7px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes athar-line {
+  from { opacity: 0; transform: translateY(14px); filter: blur(5px); }
+  to   { opacity: 1; transform: none; filter: blur(0); }
+}
+
+@keyframes athar-dot {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes athar-diamond {
+  from { opacity: 0; transform: scale(0) rotate(-90deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes athar-rule {
+  from { opacity: 0; transform: scaleX(0); }
+  to   { opacity: 1; transform: scaleX(1); }
+}
+
+@keyframes athar-glow {
+  0%   { opacity: 0; transform: scale(0.3); }
+  45%  { opacity: 0.7; }
+  100% { opacity: 0; transform: scale(1.5); }
 }
