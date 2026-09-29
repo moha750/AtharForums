@@ -16,7 +16,9 @@ type Props = {
 export function Logo({ variant = 'full', className, priority, alt = 'مساحة أثر' }: Props) {
   const light = variant === 'full' ? '/athar-logo.svg' : '/athar-mark.svg'
   const dark = variant === 'full' ? '/athar-logo-dark.svg' : '/athar-mark-dark.svg'
-  const ratio = variant === 'full' ? { width: 1006, height: 1080 } : { width: 1006, height: 560 }
+  // المقاسات الجوهرية من viewBox الملفات — لا تخمينًا. الشعار مربّع والرمز
+  // شبه مربّع، فأي رقم قديم هنا يشوّه النسبة.
+  const ratio = variant === 'full' ? { width: 1254, height: 1254 } : { width: 806, height: 816 }
 
   return (
     <span className={cn('relative inline-block', className)}>
