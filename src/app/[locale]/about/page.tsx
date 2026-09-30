@@ -88,7 +88,16 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             </h2>
             <p className="mt-2 leading-relaxed text-[var(--fg-muted)]">{tBoard('lead')}</p>
             <div className="mt-6">
-              <BoardStructure members={board} locale={locale} label={tBoard('heading')} />
+              <BoardStructure
+                members={board}
+                locale={locale}
+                label={tBoard('heading')}
+                titles={{
+                  general_manager: tBoard('rankGeneralManager'),
+                  chair: tBoard('rankChair'),
+                  member: tBoard('rankMember'),
+                }}
+              />
             </div>
           </section>
         ) : null}

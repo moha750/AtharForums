@@ -286,19 +286,21 @@ export type Faq = {
   updated_at: string
 }
 
+/** مناصب المجلس مرتّبةً من الأعلى — ترتيب enum في القاعدة هو ترتيب العرض. */
+export type BoardRank = 'general_manager' | 'chair' | 'member'
+
 export type BoardMember = {
   id: string
   name_ar: string
   name_en: string | null
-  /** المنصب في المجلس — «رئيس المجلس»، «نائب الرئيس»… */
-  position_ar: string
+  rank: BoardRank
+  /** صيغة بديلة للمسمّى (المؤنّث مثلًا). فارغةً يُعرض المسمّى المعتمد للمنصب. */
+  position_ar: string | null
   position_en: string | null
   /** الدور في المبادرة بجملة قصيرة. */
   role_ar: string | null
   role_en: string | null
   photo_url: string | null
-  /** الموضع في الهيكل: ١ رأسه. */
-  tier: number
   sort_order: number
   is_featured: boolean
   status: PublishStatus

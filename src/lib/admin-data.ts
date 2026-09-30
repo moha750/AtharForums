@@ -229,7 +229,7 @@ export async function adminBoard(): Promise<BoardMember[]> {
   const { data } = await supabase
     .from('board_members')
     .select('*')
-    .order('tier', { ascending: true })
+    .order('rank', { ascending: true })
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
   return (data as BoardMember[]) ?? []

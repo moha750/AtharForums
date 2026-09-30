@@ -1,6 +1,6 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Loader2 } from 'lucide-react'
 
@@ -8,24 +8,41 @@ import { saveBoardMember, type AdminState } from '@/actions/admin'
 import { ImageUpload } from '@/components/admin/image-upload'
 import { Button } from '@/components/ui/button'
 import { Input, Label, Textarea } from '@/components/ui/field'
-import type { BoardMember } from '@/lib/database.types'
+import { BOARD_RANKS, type RankTitles } from '@/lib/board'
+import type { BoardMember, BoardRank } from '@/lib/database.types'
 
 const initial: AdminState = { status: 'idle' }
 
 const selectStyles =
   'h-11 w-full rounded-lg bg-[var(--surface)] px-3 text-[0.95rem] text-[var(--fg)] ring-1 ring-inset ring-[var(--border-strong)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]'
 
-export function BoardForm({ member, locale }: { member?: BoardMember; locale: string }) {
+const RANK_OPTION = {
+  general_manager: 'boardRankGeneralManager',
+  chair: 'boardRankChair',
+  member: 'boardRankMember',
+} as const satisfies Record<BoardRank, string>
+
+export function BoardForm({
+  member,
+  locale,
+  titles,
+}: {
+  member?: BoardMember
+  locale: string
+  /** المسمّيات المعتمدة باللغتين — تظهر في حقلي الصيغة البديلة إن تُركا فارغين. */
+  titles: { ar: RankTitles; en: RankTitles }
+}) {
   const t = useTranslations('admin')
   const tCommon = useTranslations('common')
   const [state, action, pending] = useActionState(saveBoardMember, initial)
+  const [rank, setRank] = useState<BoardRank>(member?.rank ?? 'member')
 
+  const errors: Record<string, string> = {
+    photo: t('boardErrPhoto'),
+    'rank-taken': t('boardErrRankTaken'),
+  }
   const message =
-    state.status === 'error'
-      ? state.message === 'photo'
-        ? t('boardErrPhoto')
-        : tCommon('error')
-      : null
+    state.status === 'error' ? (errors[state.message ?? ''] ?? tCommon('error')) : null
 
   return (
     <form action={action} className="space-y-6">
@@ -51,6 +68,54 @@ export function BoardForm({ member, locale }: { member?: BoardMember; locale: st
         </div>
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="rank">{t('boardRank')}</Label>
+          <select
+            id="rank"
+            name="rank"
+            value={rank}
+            onChange={(e) => setRank(e.target.value as BoardRank)}
+            className={selectStyles}
+          >
+            {BOARD_RANKS.map((r) => (
+              <option key={r} value={r}>
+                {t(RANK_OPTION[r])}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="status">{t('forumStatus')}</Label>
+          <select
+            id="status"
+            name="status"
+            defaultValue={member?.status ?? 'published'}
+            className={selectStyles}
+          >
+            <option value="draft">{t('statusDraft')}</option>
+            <option value="published">{t('statusPublished')}</option>
+            <option value="archived">{t('statusArchived')}</option>
+          </select>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="sort_order" hint={t('boardOrderHint')}>
+            {t('bannerOrder')}
+          </Label>
+          <Input
+            id="sort_order"
+            name="sort_order"
+            type="number"
+            min={0}
+            max={9999}
+            dir="ltr"
+            defaultValue={member?.sort_order ?? 100}
+          />
+        </div>
+      </div>
+
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="name_ar">{t('boardNameAr')}</Label>
@@ -70,8 +135,7 @@ export function BoardForm({ member, locale }: { member?: BoardMember; locale: st
           <Input
             id="position_ar"
             name="position_ar"
-            required
-            minLength={2}
+            placeholder={titles.ar[rank]}
             defaultValue={member?.position_ar ?? ''}
           />
         </div>
@@ -81,6 +145,7 @@ export function BoardForm({ member, locale }: { member?: BoardMember; locale: st
             id="position_en"
             name="position_en"
             dir="ltr"
+            placeholder={titles.en[rank]}
             defaultValue={member?.position_en ?? ''}
           />
         </div>
@@ -109,55 +174,6 @@ export function BoardForm({ member, locale }: { member?: BoardMember; locale: st
             className="min-h-24"
             defaultValue={member?.role_en ?? ''}
           />
-        </div>
-      </div>
-
-      <div className="grid gap-4 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <Label htmlFor="tier" hint={t('boardTierHint')}>
-            {t('boardTier')}
-          </Label>
-          <select
-            id="tier"
-            name="tier"
-            defaultValue={String(member?.tier ?? 2)}
-            className={selectStyles}
-          >
-            {[1, 2, 3, 4, 5].map((n) => (
-              <option key={n} value={n}>
-                {t('boardTierN', { n: String(n) })}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="sort_order" hint={t('boardOrderHint')}>
-            {t('bannerOrder')}
-          </Label>
-          <Input
-            id="sort_order"
-            name="sort_order"
-            type="number"
-            min={0}
-            max={9999}
-            dir="ltr"
-            defaultValue={member?.sort_order ?? 100}
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="status">{t('forumStatus')}</Label>
-          <select
-            id="status"
-            name="status"
-            defaultValue={member?.status ?? 'published'}
-            className={selectStyles}
-          >
-            <option value="draft">{t('statusDraft')}</option>
-            <option value="published">{t('statusPublished')}</option>
-            <option value="archived">{t('statusArchived')}</option>
-          </select>
         </div>
       </div>
 

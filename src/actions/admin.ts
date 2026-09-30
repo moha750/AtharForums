@@ -533,12 +533,12 @@ const boardSchema = z.object({
   id: z.string().uuid().optional(),
   name_ar: z.string().trim().min(2).max(120),
   name_en: optional(120),
-  position_ar: z.string().trim().min(2).max(120),
+  rank: z.enum(['general_manager', 'chair', 'member']),
+  position_ar: optional(120),
   position_en: optional(120),
   role_ar: optional(300),
   role_en: optional(300),
   photo_url: optional(600),
-  tier: z.coerce.number().int().min(1).max(5),
   sort_order: z.coerce.number().int().min(0).max(9999).optional(),
   status: z.enum(['draft', 'published', 'archived']),
   is_featured: z.string().optional(),
@@ -580,12 +580,12 @@ export async function saveBoardMember(_prev: AdminState, formData: FormData): Pr
   const payload = {
     name_ar: d.name_ar,
     name_en: clean(d.name_en),
-    position_ar: d.position_ar,
+    rank: d.rank,
+    position_ar: clean(d.position_ar),
     position_en: clean(d.position_en),
     role_ar: clean(d.role_ar),
     role_en: clean(d.role_en),
     photo_url: photo,
-    tier: d.tier,
     sort_order: d.sort_order ?? 100,
     status: d.status,
     is_featured: d.is_featured === 'on',
@@ -596,7 +596,10 @@ export async function saveBoardMember(_prev: AdminState, formData: FormData): Pr
     ? await supabase.from('board_members').update(payload).eq('id', d.id)
     : await supabase.from('board_members').insert(payload)
 
-  if (error) return { status: 'error', message: error.message }
+  // 23505 هنا فهرس board_members_single_rank: منصب الواحد له بطاقة منشورة.
+  if (error) {
+    return { status: 'error', message: error.code === '23505' ? 'rank-taken' : error.message }
+  }
 
   revalidatePath('/', 'layout')
   redirect(`/${localeOf(formData)}/admin/board`)

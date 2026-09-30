@@ -243,7 +243,7 @@ export async function getBoard(featuredOnly = false): Promise<BoardMember[]> {
     .from('board_members')
     .select('*')
     .eq('status', 'published')
-    .order('tier', { ascending: true })
+    .order('rank', { ascending: true })
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true })
   if (featuredOnly) query = query.eq('is_featured', true)

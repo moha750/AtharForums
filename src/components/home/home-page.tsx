@@ -233,7 +233,15 @@ export async function HomePage({
             </Link>
           </div>
           <div className="mt-7">
-            <BoardHighlights members={board} locale={locale} />
+            <BoardHighlights
+              members={board}
+              locale={locale}
+              titles={{
+                general_manager: tBoard('rankGeneralManager'),
+                chair: tBoard('rankChair'),
+                member: tBoard('rankMember'),
+              }}
+            />
           </div>
         </section>
       ) : null}

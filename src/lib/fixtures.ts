@@ -264,14 +264,15 @@ export const fixtureFaqs: Faq[] = [
 /** أسماء المعاينة متخيَّلة، وبلا صور: يظهر الحرف الأوّل مكانها. */
 export const fixtureBoard: BoardMember[] = (
   [
-    ['r1', 'عبدالله السالم', 'Abdullah Alsalem', 'رئيس المجلس', 'Chair', 'يقود المبادرة ويعتمد المساحات الجديدة وقادتها.', 'Leads the initiative and approves new spaces and their leads.', 1, true],
-    ['r2', 'نورة الخالدي', 'Noura Alkhalidi', 'نائبة الرئيس', 'Vice Chair', 'تتابع خطط المساحات وتنسّق بينها.', 'Follows the spaces’ plans and coordinates between them.', 2, true],
-    ['r3', 'فهد العتيبي', 'Fahad Alotaibi', 'أمين المجلس', 'Secretary', 'يوثّق قرارات المجلس ويتابع تنفيذها.', 'Records the board’s decisions and follows them through.', 3, false],
-    ['r4', 'ريم الدوسري', 'Reem Aldosari', 'عضو — الشراكات', 'Member — Partnerships', 'تبني الشراكات مع الإدارات والجهات خارج الفرع.', 'Builds partnerships with departments and bodies beyond the branch.', 3, false],
-    ['r5', 'سلطان الشمري', 'Sultan Alshammari', 'عضو — الاتصال', 'Member — Communications', 'يدير حضور أثر في قنوات الوزارة الداخلية.', 'Runs Athar’s presence on the Ministry’s internal channels.', 3, false],
+    ['r1', 'general_manager', 'عبدالله السالم', 'Abdullah Alsalem', null, null, 'يرعى المبادرة ويعتمد توجّهها.', 'Sponsors the initiative and sets its direction.', true],
+    ['r2', 'chair', 'نورة الخالدي', 'Noura Alkhalidi', 'رئيسة مجلس إدارة مساحة أثر', 'Chair of the Athar Space Board', 'تقود المجلس وتعتمد المساحات الجديدة وقادتها.', 'Leads the board and approves new spaces and their leads.', true],
+    ['r3', 'member', 'فهد العتيبي', 'Fahad Alotaibi', null, null, 'يوثّق قرارات المجلس ويتابع تنفيذها.', 'Records the board’s decisions and follows them through.', false],
+    ['r4', 'member', 'ريم الدوسري', 'Reem Aldosari', 'عضوة إداريّة', null, 'تبني الشراكات مع الإدارات والجهات خارج الفرع.', 'Builds partnerships with departments and bodies beyond the branch.', false],
+    ['r5', 'member', 'سلطان الشمري', 'Sultan Alshammari', null, null, 'يدير حضور أثر في قنوات الوزارة الداخلية.', 'Runs Athar’s presence on the Ministry’s internal channels.', false],
   ] as const
-).map(([id, name_ar, name_en, position_ar, position_en, role_ar, role_en, tier, is_featured], i) => ({
+).map(([id, rank, name_ar, name_en, position_ar, position_en, role_ar, role_en, is_featured], i) => ({
   id,
+  rank,
   name_ar,
   name_en,
   position_ar,
@@ -279,7 +280,6 @@ export const fixtureBoard: BoardMember[] = (
   role_ar,
   role_en,
   photo_url: null,
-  tier,
   sort_order: (i + 1) * 10,
   is_featured,
   status: 'published' as const,

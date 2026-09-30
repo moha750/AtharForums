@@ -8,16 +8,23 @@ import { Button, buttonStyles } from '@/components/ui/button'
 import { deleteBoardMember } from '@/actions/admin'
 import { adminBoard } from '@/lib/admin-data'
 import { localized } from '@/lib/utils'
+import { boardTitle } from '@/lib/board'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AdminBoardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params
-  const [t, tCommon, members] = await Promise.all([
+  const [t, tCommon, tBoard, members] = await Promise.all([
     getTranslations('admin'),
     getTranslations('common'),
+    getTranslations('board'),
     adminBoard(),
   ])
+  const titles = {
+    general_manager: tBoard('rankGeneralManager'),
+    chair: tBoard('rankChair'),
+    member: tBoard('rankMember'),
+  }
 
   const tone = { published: 'success', draft: 'warning', archived: 'neutral' } as const
   const label = {
@@ -76,14 +83,19 @@ export default async function AdminBoardPage({ params }: { params: Promise<{ loc
                     ) : null}
                   </div>
                   <p className="mt-0.5 text-sm text-[var(--fg-muted)]">
-                    {localized(member, 'position', locale)}
+                    {boardTitle(member, locale, titles)}
                   </p>
-                  <p className="mt-0.5 text-xs text-[var(--fg-subtle)]">
-                    {t('boardTierN', { n: String(member.tier) })}
-                    {' · '}
-                    {t('bannerOrder')} <span className="font-latin">{member.sort_order}</span>
-                    {member.photo_url ? null : ` · ${t('boardNoPhoto')}`}
-                  </p>
+                  {member.rank === 'member' || !member.photo_url ? (
+                    <p className="mt-0.5 text-xs text-[var(--fg-subtle)]">
+                      {member.rank === 'member' ? (
+                        <>
+                          {t('bannerOrder')} <span className="font-latin">{member.sort_order}</span>
+                        </>
+                      ) : null}
+                      {member.rank === 'member' && !member.photo_url ? ' · ' : null}
+                      {member.photo_url ? null : t('boardNoPhoto')}
+                    </p>
+                  ) : null}
                 </div>
                 <div className="flex items-center gap-2">
                   <Link href={`/admin/board/${member.id}`} className={buttonStyles('secondary', 'sm')}>
