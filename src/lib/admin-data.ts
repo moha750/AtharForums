@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import {
   fixtureApplications,
   fixtureBanners,
+  fixtureBoard,
   fixtureFaqs,
   fixtureEvents,
   fixtureForums,
@@ -15,6 +16,7 @@ import {
 import type {
   AtharEvent,
   Banner,
+  BoardMember,
   Faq,
   Forum,
   ForumMembership,
@@ -189,4 +191,23 @@ export async function adminFaq(id: string): Promise<Faq | null> {
   const supabase = await createClient()
   const { data } = await supabase.from('faqs').select('*').eq('id', id).maybeSingle()
   return (data as Faq) ?? null
+}
+
+export async function adminBoard(): Promise<BoardMember[]> {
+  if (previewMode) return fixtureBoard
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('board_members')
+    .select('*')
+    .order('tier', { ascending: true })
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
+  return (data as BoardMember[]) ?? []
+}
+
+export async function adminBoardMember(id: string): Promise<BoardMember | null> {
+  if (previewMode) return fixtureBoard.find((m) => m.id === id) ?? null
+  const supabase = await createClient()
+  const { data } = await supabase.from('board_members').select('*').eq('id', id).maybeSingle()
+  return (data as BoardMember) ?? null
 }

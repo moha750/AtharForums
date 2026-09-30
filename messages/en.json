@@ -212,6 +212,11 @@
     "stillHeading": "Didn't find your question?",
     "stillLead": "Write to us and we'll add the answer here."
   },
+  "board": {
+    "heading": "Board",
+    "lead": "The team leading Athar Space: it creates the spaces, appoints their leads, and considers your suggestions.",
+    "seeAll": "Meet the board"
+  },
   "dashboard": {
     "heading": "My account",
     "welcome": "Welcome {name}",
@@ -347,7 +352,7 @@
     "bannerTextGroup": "Text over the image — optional",
     "bannerTextHint": "Leave it all empty when the design lives inside the image. The image then shows on its own, with no darkening.",
     "bannerNoTitle": "Image-only banner",
-    "uploadRatioNote": "This image is {width}×{height} — its ratio differs from 8:3, so the edges will be cropped.",
+    "uploadRatioNote": "This image is {width}×{height} — its ratio differs from the recommended size, so the edges will be cropped.",
     "navFaq": "FAQ",
     "faqLead": "Shown on /faq, and the featured ones also on the About page.",
     "faqEmpty": "No questions yet.",
@@ -359,7 +364,30 @@
     "faqSlugHint": "— internal key, never shown to visitors",
     "faqFeatured": "Featured",
     "faqFeaturedHint": "Also appears in the short list on the About page.",
-    "faqErrDuplicate": "That key is already used by another question."
+    "faqErrDuplicate": "That key is already used by another question.",
+    "navBoard": "Board",
+    "boardLead": "The full structure appears on the About page, and the featured members on the home page.",
+    "boardEmpty": "No members yet. Add the chair first, then the rest of the board.",
+    "boardNew": "New member",
+    "boardPhoto": "Photo",
+    "boardPhotoTitle": "A square photo, at least 800 × 800 px",
+    "boardPhotoHint": "It is shown as a circle, so keep the face centred with space around it. You can save without a photo: the first letter of the name shows until one is added.",
+    "boardNameAr": "Name (Arabic)",
+    "boardNameEn": "Name (English)",
+    "boardPositionAr": "Position (Arabic)",
+    "boardPositionEn": "Position (English)",
+    "boardPositionHint": "— e.g. Chair, Vice Chair",
+    "boardRoleAr": "Role in the initiative (Arabic)",
+    "boardRoleEn": "Role in the initiative (English)",
+    "boardRoleHint": "— a short sentence on what they look after",
+    "boardTier": "Place in the structure",
+    "boardTierHint": "— each level is one row",
+    "boardTierN": "{n, select, 1 {Level 1 — top of the structure} other {Level {n}}}",
+    "boardOrderHint": "— within the level, lower first",
+    "boardFeatured": "On the home page",
+    "boardFeaturedHint": "Shown in the board highlight on the home page, as well as in the full structure on the About page.",
+    "boardNoPhoto": "No photo",
+    "boardErrPhoto": "The photo must be uploaded here. Remove the link and upload the photo again."
   },
   "analytics": {
     "heading": "Visitor analytics",

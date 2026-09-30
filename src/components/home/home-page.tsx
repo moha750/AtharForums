@@ -6,7 +6,9 @@ import { buttonStyles } from '@/components/ui/button'
 import { ForumCard } from '@/components/forums/forum-card'
 import { HeroLogo } from '@/components/home/hero-logo'
 import { BannerStrip, type BannerSlide } from '@/components/home/banner-strip'
+import { BoardHighlights } from '@/components/site/board-structure'
 import {
+  getBoard,
   getLiveBanners,
   getPublishedForums,
   getPlatformStats,
@@ -27,13 +29,15 @@ export async function HomePage({
   const t = await getTranslations('home')
   const tForums = await getTranslations('forums')
   const tMeta = await getTranslations('meta')
+  const tBoard = await getTranslations('board')
 
-  const [forums, stats, events, posts, banners] = await Promise.all([
+  const [forums, stats, events, posts, banners, board] = await Promise.all([
     getPublishedForums(),
     getPlatformStats(),
     getUpcomingEvents(3),
     getPublishedPosts(3),
     getLiveBanners(),
+    getBoard(true),
   ])
 
   const slides: BannerSlide[] = banners.map((banner) => {
@@ -210,6 +214,29 @@ export async function HomePage({
           </div>
         </div>
       </section>
+
+      {board.length > 0 ? (
+        <section className="container-athar py-16" aria-labelledby="board-heading">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 id="board-heading" className="text-2xl font-semibold sm:text-3xl">
+                {tBoard('heading')}
+              </h2>
+              <p className="mt-1.5 text-[var(--fg-muted)]">{tBoard('lead')}</p>
+            </div>
+            <Link
+              href="/about#board"
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--primary)] hover:underline"
+            >
+              {tBoard('seeAll')}
+              <Arrow className="size-4" aria-hidden />
+            </Link>
+          </div>
+          <div className="mt-7">
+            <BoardHighlights members={board} locale={locale} />
+          </div>
+        </section>
+      ) : null}
     </>
   )
 }

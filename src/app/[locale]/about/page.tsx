@@ -7,7 +7,8 @@ import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
 import { buttonStyles } from '@/components/ui/button'
 import { FaqList } from '@/components/site/faq-list'
-import { getFaqs } from '@/lib/data'
+import { BoardStructure } from '@/components/site/board-structure'
+import { getBoard, getFaqs } from '@/lib/data'
 import { requireLaunched } from '@/lib/gate'
 import { isLocale } from '@/i18n/routing'
 
@@ -26,11 +27,13 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale)
 
   const settings = await requireLaunched(locale)
-  const [t, tMeta, tFaq, faqs] = await Promise.all([
+  const [t, tMeta, tFaq, tBoard, faqs, board] = await Promise.all([
     getTranslations('about'),
     getTranslations('meta'),
     getTranslations('faq'),
+    getTranslations('board'),
     getFaqs(true),
+    getBoard(),
   ])
 
   const about = locale === 'en' ? settings.about_en : settings.about_ar
@@ -68,6 +71,18 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             ))}
           </ol>
         </section>
+
+        {board.length > 0 ? (
+          <section className="mt-12" aria-labelledby="board">
+            <h2 id="board" className="scroll-mt-24 text-2xl font-semibold">
+              {tBoard('heading')}
+            </h2>
+            <p className="mt-2 leading-relaxed text-[var(--fg-muted)]">{tBoard('lead')}</p>
+            <div className="mt-6">
+              <BoardStructure members={board} locale={locale} label={tBoard('heading')} />
+            </div>
+          </section>
+        ) : null}
 
         {faqs.length > 0 ? (
           <section className="mt-12" aria-labelledby="faq">

@@ -284,6 +284,26 @@ export type Faq = {
   updated_at: string
 }
 
+export type BoardMember = {
+  id: string
+  name_ar: string
+  name_en: string | null
+  /** المنصب في المجلس — «رئيس المجلس»، «نائب الرئيس»… */
+  position_ar: string
+  position_en: string | null
+  /** الدور في المبادرة بجملة قصيرة. */
+  role_ar: string | null
+  role_en: string | null
+  photo_url: string | null
+  /** الموضع في الهيكل: ١ رأسه. */
+  tier: number
+  sort_order: number
+  is_featured: boolean
+  status: PublishStatus
+  created_at: string
+  updated_at: string
+}
+
 export type WaitlistSubscriber = {
   id: string
   email: string
@@ -341,6 +361,7 @@ export type Database = {
       posts: Table<Post>
       banners: Table<Banner>
       faqs: Table<Faq>
+      board_members: Table<BoardMember>
       waitlist_subscribers: Table<WaitlistSubscriber>
       audit_log: Table<AuditLogRow>
     }

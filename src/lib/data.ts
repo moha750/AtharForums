@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import {
   fixtureBanners,
   fixtureEvents,
+  fixtureBoard,
   fixtureFaqs,
   fixtureForums,
   fixtureMembers,
@@ -12,6 +13,7 @@ import {
 import type {
   AtharEvent,
   Banner,
+  BoardMember,
   Faq,
   Forum,
   ForumMemberPublic,
@@ -226,4 +228,26 @@ export async function getFaqs(featuredOnly = false): Promise<Faq[]> {
   const { data, error } = await query
   if (error) console.error('[athar] استعلام فشل', error)
   return (data as Faq[]) ?? []
+}
+
+/**
+ * مجلس الإدارة المنشور، مرتّبًا كما يُرسم الهيكل: المستوى ثم الترتيب داخله.
+ *
+ * `featuredOnly` لمختصر الصفحة الرئيسة. والشرط على الحالة مكرّر رغم السياسة
+ * للسبب نفسه في getFaqs: المشرف يقرأ المسوّدات بسياسته.
+ */
+export async function getBoard(featuredOnly = false): Promise<BoardMember[]> {
+  if (previewMode) return featuredOnly ? fixtureBoard.filter((m) => m.is_featured) : fixtureBoard
+  const supabase = await createClient()
+  let query = supabase
+    .from('board_members')
+    .select('*')
+    .eq('status', 'published')
+    .order('tier', { ascending: true })
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: true })
+  if (featuredOnly) query = query.eq('is_featured', true)
+  const { data, error } = await query
+  if (error) console.error('[athar] استعلام فشل', error)
+  return (data as BoardMember[]) ?? []
 }
