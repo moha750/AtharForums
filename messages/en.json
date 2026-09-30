@@ -232,7 +232,8 @@
     "empty": "No published questions yet.",
     "seeAll": "All questions",
     "stillHeading": "Didn't find your question?",
-    "stillLead": "Write to us and we'll add the answer here."
+    "stillLead": "Write to us through the contact form and we'll add the answer here.",
+    "stillCta": "Contact us"
   },
   "board": {
     "heading": "Board",

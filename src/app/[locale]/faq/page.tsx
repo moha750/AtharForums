@@ -4,8 +4,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { FaqList } from '@/components/site/faq-list'
 import { SiteShell } from '@/components/site/site-shell'
 import { isLocale } from '@/i18n/routing'
+import { Link } from '@/i18n/navigation'
 import { getFaqs } from '@/lib/data'
-import { getPublicSettings } from '@/lib/settings'
 import { buttonStyles } from '@/components/ui/button'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -20,11 +20,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const [t, settings, faqs] = await Promise.all([
-    getTranslations('faq'),
-    getPublicSettings(),
-    getFaqs(),
-  ])
+  const [t, faqs] = await Promise.all([getTranslations('faq'), getFaqs()])
 
   return (
     <SiteShell locale={locale}>
@@ -43,20 +39,13 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
             </p>
           )}
 
-          {settings.contact_email ? (
-            <div className="mt-10 rounded-2xl bg-[var(--bg-subtle)] p-6 text-center ring-1 ring-[var(--border)]">
-              <p className="font-medium">{t('stillHeading')}</p>
-              <p className="mt-1 text-sm text-[var(--fg-muted)]">{t('stillLead')}</p>
-              <a
-                href={`mailto:${settings.contact_email}`}
-                className={`${buttonStyles('secondary', 'md')} mt-4`}
-              >
-                <span dir="ltr" className="font-latin">
-                  {settings.contact_email}
-                </span>
-              </a>
-            </div>
-          ) : null}
+          <div className="mt-10 rounded-2xl bg-[var(--bg-subtle)] p-6 text-center ring-1 ring-[var(--border)]">
+            <p className="font-medium">{t('stillHeading')}</p>
+            <p className="mt-1 text-sm text-[var(--fg-muted)]">{t('stillLead')}</p>
+            <Link href="/about#contact" className={`${buttonStyles('secondary', 'md')} mt-4`}>
+              {t('stillCta')}
+            </Link>
+          </div>
         </div>
       </div>
     </SiteShell>
