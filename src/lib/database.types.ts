@@ -253,7 +253,8 @@ export type Banner = {
   image_url: string
   image_alt_ar: string | null
   image_alt_en: string | null
-  title_ar: string
+  /** اختياريّ: البانر قد يكون صورة وحدها بلا طبقة نصّ. */
+  title_ar: string | null
   title_en: string | null
   body_ar: string | null
   body_en: string | null

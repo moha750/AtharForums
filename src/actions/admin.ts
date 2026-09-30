@@ -389,7 +389,7 @@ const bannerSchema = z.object({
   image_url: z.string().trim().min(1).max(600),
   image_alt_ar: optional(200),
   image_alt_en: optional(200),
-  title_ar: z.string().trim().min(2).max(160),
+  title_ar: optional(160),
   title_en: optional(160),
   body_ar: optional(400),
   body_en: optional(400),
@@ -422,7 +422,9 @@ export async function saveBanner(_prev: AdminState, formData: FormData): Promise
   if (href && !/^(https?:\/\/|\/)\S*$/.test(href)) {
     return { status: 'error', message: 'cta-href' }
   }
-  if (Boolean(href) !== Boolean(label)) return { status: 'error', message: 'cta-pair' }
+  // رابط بلا نصّ جائز — البانر كلّه يصير قابلًا للنقر. والعكس لا: نصّ زرٍّ
+  // بلا رابط زرٌّ لا يؤدّي إلى شيء.
+  if (label && !href) return { status: 'error', message: 'cta-pair' }
 
   const startsAt = toInstant(d.starts_at)
   const endsAt = toInstant(d.ends_at)
@@ -432,7 +434,7 @@ export async function saveBanner(_prev: AdminState, formData: FormData): Promise
     image_url: d.image_url,
     image_alt_ar: clean(d.image_alt_ar),
     image_alt_en: clean(d.image_alt_en),
-    title_ar: d.title_ar,
+    title_ar: clean(d.title_ar),
     title_en: clean(d.title_en),
     body_ar: clean(d.body_ar),
     body_en: clean(d.body_en),

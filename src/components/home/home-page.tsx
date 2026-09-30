@@ -44,7 +44,7 @@ export async function HomePage({
       imageUrl: banner.image_url,
       // النصّ البديل يصف الصورة؛ فإن لم يُكتب فالعنوان أقرب وصف متاح.
       alt: localized(banner, 'image_alt', locale) || localized(banner, 'title', locale),
-      title: localized(banner, 'title', locale),
+      title: localized(banner, 'title', locale) || null,
       body: localized(banner, 'body', locale) || null,
       ctaLabel: localized(banner, 'cta_label', locale) || null,
       ctaHref: href ? (external ? href : `/${locale}${href}`) : null,
@@ -65,6 +65,20 @@ export async function HomePage({
         </div>
 
         <div className="container-athar py-16 text-center sm:py-24">
+          {slides.length > 0 ? (
+            <BannerStrip
+              slides={slides}
+              locale={locale}
+              className="mb-12 sm:mb-16"
+              labels={{
+                region: t('bannersRegion'),
+                previous: t('bannersPrevious'),
+                next: t('bannersNext'),
+                goTo: t('bannersGoTo'),
+              }}
+            />
+          ) : null}
+
           <HeroLogo label={tMeta('siteName')} className="mb-8 h-44 sm:mb-10 sm:h-56" />
 
           <h1 className="mx-auto max-w-3xl text-balance text-3xl font-bold sm:text-5xl">
@@ -109,20 +123,6 @@ export async function HomePage({
           </dl>
         </div>
       </section>
-
-      {slides.length > 0 ? (
-        <BannerStrip
-          slides={slides}
-          locale={locale}
-          labels={{
-            region: t('bannersRegion'),
-            previous: t('bannersPrevious'),
-            next: t('bannersNext'),
-            goTo: t('bannersGoTo'),
-            pause: t('bannersPaused'),
-          }}
-        />
-      ) : null}
 
       <section className="container-athar py-16" aria-labelledby="forums-heading">
         <div className="flex flex-wrap items-end justify-between gap-3">

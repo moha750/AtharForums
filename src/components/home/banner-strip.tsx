@@ -10,7 +10,7 @@ export type BannerSlide = {
   id: string
   imageUrl: string
   alt: string
-  title: string
+  title: string | null
   body: string | null
   ctaLabel: string | null
   /** جاهز للاستعمال: الداخليّ مسبوق باللغة، والخارجيّ كما هو. */
@@ -20,14 +20,26 @@ export type BannerSlide = {
 
 const INTERVAL = 7000
 
+/**
+ * نسبة واحدة في كل المقاسات — 8:3.
+ *
+ * كانت نسبتان (4:3 للجوّال و16:6 للحاسوب)، وهذا يعني أنّ المصمّم لا يعرف
+ * على أي مقاس يصمّم: ما يظهر كاملًا على الحاسوب يُقصّ نصفه على الجوّال.
+ * النصّ — إن وُجد — يتكيّف بدلًا من الصورة: طبقة فوقها على الشاشات
+ * الواسعة، ولوحة تحتها على الجوّال حيث لا يتّسع الشريط لسطرين.
+ */
+const RATIO = '8 / 3'
+
 export function BannerStrip({
   slides,
   locale,
   labels,
+  className,
 }: {
   slides: BannerSlide[]
   locale: string
-  labels: { region: string; previous: string; next: string; goTo: string; pause: string }
+  labels: { region: string; previous: string; next: string; goTo: string }
+  className?: string
 }) {
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -47,13 +59,10 @@ export function BannerStrip({
   }, [])
 
   useEffect(() => {
-    // لا تبديل تلقائيّ مع تفضيل تقليل الحركة، ولا وهو متوقّف، ولا لبانر واحد.
-    // وnextjs يوقف المؤقّتات في التبويب المخفيّ؟ لا — نتكفّل بها بأنفسنا،
-    // وإلا عاد الزائر فوجد الشريط قد قفز عشر مرّات دفعة واحدة.
     if (!many || paused || !motionOk) return
-    const tick = () => setIndex((i) => (i + 1) % count)
+    // التبويب المخفيّ لا يُبدّل: وإلا عاد الزائر فوجد الشريط قد قفز عشرًا.
     const timer = window.setInterval(() => {
-      if (!document.hidden) tick()
+      if (!document.hidden) setIndex((i) => (i + 1) % count)
     }, INTERVAL)
     return () => window.clearInterval(timer)
   }, [many, paused, motionOk, count])
@@ -68,78 +77,107 @@ export function BannerStrip({
     <section
       aria-roledescription="carousel"
       aria-label={labels.region}
-      className="container-athar py-10 sm:py-14"
+      className={cn('relative', className)}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={() => setPaused(false)}
     >
-      <div className="relative overflow-hidden rounded-2xl ring-1 ring-[var(--border)]">
-        <div className="relative aspect-[4/3] sm:aspect-[16/6]">
-          {slides.map((slide, i) => {
-            const active = i === index
-            return (
-              <div
-                key={slide.id}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`${i + 1} / ${count}`}
-                aria-hidden={!active}
-                className={cn(
-                  'absolute inset-0 transition-opacity duration-700 ease-out motion-reduce:transition-none',
-                  active ? 'opacity-100' : 'pointer-events-none opacity-0'
-                )}
-              >
-                <Image
-                  src={slide.imageUrl}
-                  alt={slide.alt}
-                  fill
-                  priority={i === 0}
-                  sizes="(min-width: 1280px) 76rem, 100vw"
-                  className="object-cover"
-                />
-                {/* حجاب متدرّج من جهة النصّ وحدها: تغطية الصورة كلها تُفقدها
-                    معناها، وتركها بلا حجاب يجعل النصّ يختفي على الصور الفاتحة. */}
-                <div
-                  aria-hidden
-                  className="banner-scrim absolute inset-0"
-                />
-                <div className="absolute inset-0 flex items-center">
-                  <div className="max-w-xl p-6 text-start sm:p-10">
-                    <h2 className="text-balance text-xl font-bold text-white sm:text-3xl">
-                      {slide.title}
-                    </h2>
+      <div className="grid overflow-hidden rounded-2xl ring-1 ring-[var(--border)]">
+        {slides.map((slide, i) => {
+          const active = i === index
+          const hasText = Boolean(slide.title || slide.body || slide.ctaLabel)
+          // رابط بلا زرّ ظاهر: البانر كلّه يصير قابلًا للنقر.
+          const wholeIsLink = Boolean(slide.ctaHref) && !slide.ctaLabel
+          const linkProps = slide.external
+            ? { target: '_blank', rel: 'noopener noreferrer' as const }
+            : {}
+
+          const picture = (
+            <div className="relative" style={{ aspectRatio: RATIO }}>
+              <Image
+                src={slide.imageUrl}
+                alt={slide.alt}
+                fill
+                priority={i === 0}
+                sizes="(min-width: 1280px) 76rem, 100vw"
+                className="object-cover"
+              />
+              {/* الحجاب للنصّ وحده: تعتيم صورةٍ لا نصّ فوقها إفسادٌ لها. */}
+              {hasText ? <div aria-hidden className="banner-scrim absolute inset-0 hidden sm:block" /> : null}
+            </div>
+          )
+
+          return (
+            <div
+              key={slide.id}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} / ${count}`}
+              aria-hidden={!active}
+              className={cn(
+                'relative col-start-1 row-start-1 transition-opacity duration-700 ease-out motion-reduce:transition-none',
+                active ? 'opacity-100' : 'pointer-events-none opacity-0'
+              )}
+            >
+              {wholeIsLink && slide.ctaHref ? (
+                <a
+                  href={slide.ctaHref}
+                  {...linkProps}
+                  tabIndex={active ? undefined : -1}
+                  aria-label={slide.alt}
+                  className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ring)]"
+                >
+                  {picture}
+                </a>
+              ) : (
+                picture
+              )}
+
+              {hasText ? (
+                // على الجوّال لوحة تحت الصورة، وعلى الشاشات الواسعة طبقة
+                // فوقها. عنصر واحد بصنفين لا عنصران، حتى لا يقرأ قارئ
+                // الشاشة النصّ مرّتين.
+                <div className="bg-[#061a16] p-5 text-start sm:absolute sm:inset-0 sm:flex sm:max-w-xl sm:items-center sm:bg-transparent sm:p-10">
+                  <div>
+                    {slide.title ? (
+                      <h2 className="text-balance text-lg font-bold text-white sm:text-3xl">
+                        {slide.title}
+                      </h2>
+                    ) : null}
                     {slide.body ? (
-                      <p className="mt-2.5 text-pretty text-sm leading-relaxed text-white/85 sm:text-base">
+                      <p className="mt-2 text-pretty text-sm leading-relaxed text-white/85 sm:mt-2.5 sm:text-base">
                         {slide.body}
                       </p>
                     ) : null}
                     {slide.ctaHref && slide.ctaLabel ? (
                       <a
                         href={slide.ctaHref}
-                        {...(slide.external
-                          ? { target: '_blank', rel: 'noopener noreferrer' }
-                          : {})}
+                        {...linkProps}
                         tabIndex={active ? undefined : -1}
-                        className="mt-5 inline-flex h-11 items-center rounded-lg bg-white px-5 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                        className="mt-4 inline-flex h-11 items-center rounded-lg bg-white px-5 text-sm font-semibold text-[var(--primary)] transition-colors hover:bg-white/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white sm:mt-5"
                       >
                         {slide.ctaLabel}
                       </a>
                     ) : null}
                   </div>
                 </div>
-              </div>
-            )
-          })}
-        </div>
+              ) : null}
+            </div>
+          )
+        })}
 
         {many ? (
-          <>
+          <div
+            className="pointer-events-none col-start-1 row-start-1 self-start"
+            style={{ aspectRatio: RATIO }}
+          >
+            <div className="relative h-full w-full">
             <button
               type="button"
               onClick={() => go(index - 1)}
               aria-label={labels.previous}
-              className="absolute start-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-black/35 text-white backdrop-blur transition-colors hover:bg-black/55 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="pointer-events-auto absolute start-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-black/35 text-white backdrop-blur transition-colors hover:bg-black/55 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <PrevIcon className="size-5" aria-hidden />
             </button>
@@ -147,12 +185,12 @@ export function BannerStrip({
               type="button"
               onClick={() => go(index + 1)}
               aria-label={labels.next}
-              className="absolute end-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-black/35 text-white backdrop-blur transition-colors hover:bg-black/55 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="pointer-events-auto absolute end-3 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full bg-black/35 text-white backdrop-blur transition-colors hover:bg-black/55 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <NextIcon className="size-5" aria-hidden />
             </button>
 
-            <div className="absolute bottom-3 start-1/2 flex -translate-x-1/2 gap-2 rtl:translate-x-1/2">
+            <div className="pointer-events-auto absolute bottom-3 start-1/2 flex -translate-x-1/2 gap-2 rtl:translate-x-1/2">
               {slides.map((slide, i) => (
                 <button
                   key={slide.id}
@@ -167,7 +205,8 @@ export function BannerStrip({
                 />
               ))}
             </div>
-          </>
+            </div>
+          </div>
         ) : null}
       </div>
     </section>

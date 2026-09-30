@@ -78,8 +78,7 @@
     "bannersRegion": "Athar Space announcements",
     "bannersPrevious": "Previous announcement",
     "bannersNext": "Next announcement",
-    "bannersGoTo": "Go to announcement",
-    "bannersPaused": "Rotation paused"
+    "bannersGoTo": "Go to announcement"
   },
   "forums": {
     "heading": "Spaces",
@@ -310,7 +309,7 @@
     "bannerBodyAr": "Text (Arabic)",
     "bannerBodyEn": "Text (English)",
     "bannerCta": "Button",
-    "bannerCtaHint": "Leave empty for a display-only banner. For a button, fill in both the Arabic label and the link.",
+    "bannerCtaHint": "Leave empty for no button. A link without a label is fine too — the whole banner becomes clickable.",
     "bannerCtaLabelAr": "Button label (Arabic)",
     "bannerCtaLabelEn": "Button label (English)",
     "bannerCtaHref": "Link",
@@ -323,7 +322,7 @@
     "bannerStateLive": "Live now",
     "bannerStateScheduled": "Scheduled",
     "bannerStateExpired": "Ended",
-    "bannerErrCtaPair": "A button needs both an Arabic label and a link — or leave both empty.",
+    "bannerErrCtaPair": "A button label needs a link. Add the link, or clear the label.",
     "bannerErrCtaHref": "The link must start with / for internal or https:// for external.",
     "bannerErrWindow": "The end date must come after the start date.",
     "uploadPrompt": "Drop an image here or click to choose",
@@ -333,7 +332,13 @@
     "uploadBusy": "Uploading…",
     "uploadTooBig": "The image is larger than 8 MB.",
     "uploadBadType": "Unsupported format — use PNG, JPG, WebP or AVIF.",
-    "uploadFailed": "The image could not be uploaded. Please try again."
+    "uploadFailed": "The image could not be uploaded. Please try again.",
+    "bannerSizeTitle": "Recommended size: 2400 × 900 px",
+    "bannerSizeHint": "An 8:3 ratio at every screen size — design it once. If you add a title below, keep the right third calm so the text stays readable.",
+    "bannerTextGroup": "Text over the image — optional",
+    "bannerTextHint": "Leave it all empty when the design lives inside the image. The image then shows on its own, with no darkening.",
+    "bannerNoTitle": "Image-only banner",
+    "uploadRatioNote": "This image is {width}×{height} — its ratio differs from 8:3, so the edges will be cropped."
   },
   "analytics": {
     "heading": "Visitor analytics",

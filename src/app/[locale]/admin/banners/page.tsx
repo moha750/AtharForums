@@ -93,7 +93,11 @@ export default async function AdminBannersPage({
 
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="font-medium">{localized(banner, 'title', locale)}</p>
+                    <p className="font-medium">
+                      {localized(banner, 'title', locale) || (
+                        <span className="text-[var(--fg-muted)]">{t('bannerNoTitle')}</span>
+                      )}
+                    </p>
                     <Badge tone={tone[state]}>{label[state]}</Badge>
                   </div>
                   <p className="mt-1 text-xs text-[var(--fg-subtle)]">

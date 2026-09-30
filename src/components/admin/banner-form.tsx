@@ -44,11 +44,23 @@ export function BannerForm({
       <input type="hidden" name="locale" value={locale} />
       {banner ? <input type="hidden" name="id" value={banner.id} /> : null}
 
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <Label htmlFor="image">{t('bannerImage')}</Label>
-        <ImageUpload name="image_url" defaultUrl={banner?.image_url} folder="banners" />
+        <div className="rounded-lg bg-[var(--primary-soft)] px-3.5 py-2.5 text-sm text-[var(--primary)]">
+          <p className="font-medium">{t('bannerSizeTitle')}</p>
+          <p className="mt-0.5 text-[var(--fg-muted)]">{t('bannerSizeHint')}</p>
+        </div>
+        <ImageUpload
+          name="image_url"
+          defaultUrl={banner?.image_url}
+          folder="banners"
+          ratio={{ w: 8, h: 3 }}
+        />
       </div>
 
+      <fieldset className="space-y-4 rounded-xl bg-[var(--bg-subtle)] p-4 ring-1 ring-[var(--border)]">
+        <legend className="px-1 text-sm font-medium">{t('bannerTextGroup')}</legend>
+        <p className="text-xs text-[var(--fg-subtle)]">{t('bannerTextHint')}</p>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-1.5">
           <Label htmlFor="image_alt_ar" hint={t('bannerAltHint')}>
@@ -68,7 +80,7 @@ export function BannerForm({
 
         <div className="space-y-1.5">
           <Label htmlFor="title_ar">{t('bannerTitleAr')}</Label>
-          <Input id="title_ar" name="title_ar" required defaultValue={banner?.title_ar ?? ''} />
+          <Input id="title_ar" name="title_ar" defaultValue={banner?.title_ar ?? ''} />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="title_en">{t('bannerTitleEn')}</Label>
@@ -91,6 +103,7 @@ export function BannerForm({
           <Textarea id="body_en" name="body_en" dir="ltr" defaultValue={banner?.body_en ?? ''} />
         </div>
       </div>
+      </fieldset>
 
       <fieldset className="space-y-4 rounded-xl bg-[var(--bg-subtle)] p-4 ring-1 ring-[var(--border)]">
         <legend className="px-1 text-sm font-medium">{t('bannerCta')}</legend>
