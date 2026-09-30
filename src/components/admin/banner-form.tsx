@@ -55,6 +55,7 @@ export function BannerForm({
           defaultUrl={banner?.image_url}
           folder="banners"
           ratio={{ w: 8, h: 3 }}
+          outputWidth={2400}
         />
       </div>
 

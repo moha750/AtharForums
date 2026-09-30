@@ -3,8 +3,9 @@
 import { useId, useRef, useState } from 'react'
 import NextImage from 'next/image'
 import { useTranslations } from 'next-intl'
-import { ImageUp, Loader2, TriangleAlert, X } from 'lucide-react'
+import { Crop, ImageUp, Loader2, X } from 'lucide-react'
 
+import { ImageCropper } from '@/components/admin/image-cropper'
 import { createClient } from '@/lib/supabase/client'
 import { cn } from '@/lib/utils'
 
@@ -12,15 +13,31 @@ import { cn } from '@/lib/utils'
 const MAX_BYTES = 8 * 1024 * 1024
 
 /**
+ * حدّ الملف الداخل إلى الاقتصاص. أكبر من حدّ الدلو عمدًا: صورة الجوّال
+ * الأصلية تتجاوز ثمانية ميغابايت كثيرًا، والاقتصاص يُخرجها أصغر بكثير.
+ * والسقف موجود لأنّ فكّ صورة ضخمة في ذاكرة المتصفّح يُثقل الجهاز.
+ */
+const MAX_SOURCE_BYTES = 25 * 1024 * 1024
+
+/**
  * الدلو يقبل SVG أيضًا، ونمنعه هنا: next/image لا يحسّن SVG إلا بتفعيل
- * dangerouslyAllowSVG، وخلفيّة البانر صورة لا رسم متجهيّ.
+ * dangerouslyAllowSVG، والصور هنا صور لا رسوم متجهيّة.
  */
 const TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/avif']
 
-/** فرق النسبة الذي نتجاوز عنه بلا تنبيه — ما دونه لا تُلاحظه العين. */
-const RATIO_TOLERANCE = 0.08
+const EXT: Record<string, string> = {
+  'image/png': 'png',
+  'image/jpeg': 'jpg',
+  'image/webp': 'webp',
+  'image/avif': 'avif',
+}
+
+/** فرق النسبة الذي نرفع معه الصورة كما هي بلا اقتصاص — ما دونه لا تُلاحظه العين. */
+const RATIO_TOLERANCE = 0.02
 
 type Ratio = { w: number; h: number }
+
+type CropSource = { src: string; local: boolean; type: string }
 
 async function readSize(file: File): Promise<Ratio | null> {
   const url = URL.createObjectURL(file)
@@ -36,9 +53,19 @@ async function readSize(file: File): Promise<Ratio | null> {
   }
 }
 
+function typeFromUrl(url: string): string {
+  const ext = url.split('?')[0].split('.').pop()?.toLowerCase()
+  return Object.entries(EXT).find(([, e]) => e === ext || (ext === 'jpeg' && e === 'jpg'))?.[0] ?? 'image/jpeg'
+}
+
 /**
  * رفع صورة إلى دلو media، وإخراج رابطها العامّ في حقل مخفيّ باسم `name`
  * ليصل مع بقيّة النموذج إلى إجراء الخادم.
+ *
+ * إن مُرّرت `ratio` فالصورة التي تخالف النسبة لا تُرفع كما هي: تُفتح نافذة
+ * اقتصاص يختار فيها المشرف الإطار، ويُرفع الناتج وحده. والصورة المطابقة
+ * تُرفع بلا لمس — تصميمٌ جاهز بمقاسه لا يُعاد ضغطه فيفقد حدّته. وزرّ «تعديل
+ * الإطار» يعيد فتح الاقتصاص على الأصل في أيّ وقت.
  *
  * الرفع يتمّ من المتصفّح مباشرة إلى Supabase: المرور بالخادم يعني تحميل
  * ثمانية ميغابايت إلى الذاكرة ثمّ رفعها ثانية، بلا فائدة. وسياسة الدلو هي
@@ -49,13 +76,19 @@ export function ImageUpload({
   defaultUrl,
   folder = 'uploads',
   ratio,
+  shape = 'rect',
+  outputWidth = 1600,
   className,
 }: {
   name: string
   defaultUrl?: string | null
   folder?: string
-  /** النسبة المتوقَّعة — للمعاينة وللتنبيه عند اختلافها، لا للرفض. */
+  /** النسبة المطلوبة. بوجودها يُقصّ ما يخالفها قبل الرفع. */
   ratio?: Ratio
+  /** دائرة للصور الشخصية: دليل الاقتصاص والمعاينة دائريّان. */
+  shape?: 'rect' | 'circle'
+  /** أقصى عرض للصورة بعد الاقتصاص. */
+  outputWidth?: number
   className?: string
 }) {
   const t = useTranslations('admin')
@@ -63,40 +96,42 @@ export function ImageUpload({
   const fileRef = useRef<HTMLInputElement>(null)
   // مسارات رفعناها في هذه الجلسة ثمّ استُبدلت — تُحذف كي لا تتراكم يتيمة.
   const orphans = useRef<string[]>([])
+  // الأصل قبل الاقتصاص، ليعيد «تعديل الإطار» الاقتصاص منه لا من الناتج.
+  const original = useRef<File | null>(null)
 
   const [url, setUrl] = useState(defaultUrl ?? '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [note, setNote] = useState<string | null>(null)
   const [dragging, setDragging] = useState(false)
+  const [crop, setCrop] = useState<CropSource | null>(null)
 
   const box = ratio ? { aspectRatio: `${ratio.w} / ${ratio.h}` } : { aspectRatio: '8 / 3' }
 
-  async function handle(file: File) {
+  function openCrop(file: File) {
+    setCrop({ src: URL.createObjectURL(file), local: true, type: file.type })
+  }
+
+  function closeCrop() {
+    if (crop?.local) URL.revokeObjectURL(crop.src)
+    setCrop(null)
+  }
+
+  function adjust() {
     setError(null)
-    setNote(null)
-    if (!TYPES.includes(file.type)) return setError(t('uploadBadType'))
-    if (file.size > MAX_BYTES) return setError(t('uploadTooBig'))
+    if (original.current) openCrop(original.current)
+    else if (url) setCrop({ src: url, local: false, type: typeFromUrl(url) })
+  }
 
-    // تنبيه لا رفض: المقاس الخاطئ يُقصّ عرضًا، والمصمّم أدرى بما يريد.
-    const size = await readSize(file)
-    if (ratio && size && size.h > 0) {
-      const want = ratio.w / ratio.h
-      const got = size.w / size.h
-      if (Math.abs(got - want) / want > RATIO_TOLERANCE) {
-        setNote(t('uploadRatioNote', { width: size.w, height: size.h }))
-      }
-    }
-
+  async function upload(body: Blob) {
+    if (body.size > MAX_BYTES) return setError(t('uploadTooBig'))
     setBusy(true)
     try {
       const supabase = createClient()
-      const ext = (file.name.split('.').pop() ?? '').toLowerCase().replace(/[^a-z0-9]/g, '')
-      const path = `${folder}/${crypto.randomUUID()}.${ext || 'jpg'}`
+      const path = `${folder}/${crypto.randomUUID()}.${EXT[body.type] ?? 'jpg'}`
 
       const { error: uploadError } = await supabase.storage
         .from('media')
-        .upload(path, file, { contentType: file.type, cacheControl: '31536000' })
+        .upload(path, body, { contentType: body.type, cacheControl: '31536000' })
       if (uploadError) throw uploadError
 
       const { data } = supabase.storage.from('media').getPublicUrl(path)
@@ -110,9 +145,31 @@ export function ImageUpload({
       setError(t('uploadFailed'))
     } finally {
       setBusy(false)
-      if (fileRef.current) fileRef.current.value = ''
     }
   }
+
+  async function handle(file: File) {
+    setError(null)
+    if (fileRef.current) fileRef.current.value = ''
+    if (!TYPES.includes(file.type)) return setError(t('uploadBadType'))
+
+    if (!ratio) {
+      if (file.size > MAX_BYTES) return setError(t('uploadTooBig'))
+      return upload(file)
+    }
+
+    if (file.size > MAX_SOURCE_BYTES) return setError(t('uploadTooBigSource'))
+    const size = await readSize(file)
+    if (!size) return setError(t('uploadBadType'))
+    original.current = file
+
+    const want = ratio.w / ratio.h
+    const matches = size.h > 0 && Math.abs(size.w / size.h - want) / want <= RATIO_TOLERANCE
+    if (matches && file.size <= MAX_BYTES) return upload(file)
+    openCrop(file)
+  }
+
+  const circle = shape === 'circle'
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -132,25 +189,51 @@ export function ImageUpload({
       {url ? (
         <div className="overflow-hidden rounded-xl ring-1 ring-[var(--border)]">
           <div className="relative bg-[var(--bg-subtle)]" style={box}>
-            <NextImage
-              src={url}
-              alt=""
-              fill
-              sizes="(min-width: 640px) 40rem, 100vw"
-              className="object-cover"
-            />
+            <div
+              className={cn(
+                'absolute overflow-hidden',
+                circle ? 'inset-3 rounded-full ring-1 ring-[var(--border)]' : 'inset-0'
+              )}
+            >
+              <NextImage
+                src={url}
+                alt=""
+                fill
+                sizes="(min-width: 640px) 40rem, 100vw"
+                className="object-cover"
+              />
+            </div>
+            {busy ? (
+              <div className="absolute inset-0 grid place-items-center bg-[color-mix(in_srgb,var(--surface)_60%,transparent)]">
+                <Loader2 className="size-6 animate-spin text-[var(--primary)]" aria-hidden />
+              </div>
+            ) : null}
           </div>
-          <div className="flex items-center justify-between gap-2 bg-[var(--surface)] px-3 py-2">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 bg-[var(--surface)] px-3 py-2 text-sm">
             <label
               htmlFor={inputId}
-              className="cursor-pointer text-sm font-medium text-[var(--primary)] hover:underline"
+              className="cursor-pointer font-medium text-[var(--primary)] hover:underline"
             >
               {busy ? t('uploadBusy') : t('uploadReplace')}
             </label>
+            {ratio ? (
+              <button
+                type="button"
+                onClick={adjust}
+                disabled={busy}
+                className="inline-flex items-center gap-1 font-medium text-[var(--primary)] hover:underline disabled:opacity-55"
+              >
+                <Crop className="size-4" aria-hidden />
+                {t('uploadAdjust')}
+              </button>
+            ) : null}
             <button
               type="button"
-              onClick={() => setUrl('')}
-              className="inline-flex items-center gap-1 text-sm text-[var(--fg-subtle)] transition-colors hover:text-[var(--danger)]"
+              onClick={() => {
+                setUrl('')
+                original.current = null
+              }}
+              className="ms-auto inline-flex items-center gap-1 text-[var(--fg-subtle)] transition-colors hover:text-[var(--danger)]"
             >
               <X className="size-4" aria-hidden />
               {t('uploadRemove')}
@@ -187,7 +270,9 @@ export function ImageUpload({
           <span className="text-sm font-medium text-[var(--fg)]">
             {busy ? t('uploadBusy') : t('uploadPrompt')}
           </span>
-          <span className="text-xs text-[var(--fg-subtle)]">{t('uploadHint')}</span>
+          <span className="text-xs text-[var(--fg-subtle)]">
+            {ratio ? t('uploadHintCrop') : t('uploadHint')}
+          </span>
         </label>
       )}
 
@@ -197,11 +282,20 @@ export function ImageUpload({
         </p>
       ) : null}
 
-      {note ? (
-        <p className="flex items-start gap-1.5 text-xs text-[var(--warning)]">
-          <TriangleAlert className="mt-0.5 size-3.5 shrink-0" aria-hidden />
-          {note}
-        </p>
+      {crop && ratio ? (
+        <ImageCropper
+          src={crop.src}
+          crossOrigin={!crop.local}
+          sourceType={crop.type}
+          ratio={ratio}
+          shape={shape}
+          outputWidth={outputWidth}
+          onCancel={closeCrop}
+          onConfirm={(blob) => {
+            closeCrop()
+            void upload(blob)
+          }}
+        />
       ) : null}
     </div>
   )

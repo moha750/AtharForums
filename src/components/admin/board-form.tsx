@@ -40,6 +40,8 @@ export function BoardForm({ member, locale }: { member?: BoardMember; locale: st
             defaultUrl={member?.photo_url}
             folder="board"
             ratio={{ w: 1, h: 1 }}
+            shape="circle"
+            outputWidth={800}
             className="max-w-48"
           />
         </div>
