@@ -21,6 +21,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
     { href: '/events', label: t('events') },
     { href: '/news', label: t('news') },
     { href: '/about', label: t('about') },
+    { href: '/faq', label: t('faq') },
   ] as const
 
   const themeLabels = {

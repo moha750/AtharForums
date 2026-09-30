@@ -270,6 +270,20 @@ export type Banner = {
   updated_at: string
 }
 
+export type Faq = {
+  id: string
+  slug: string
+  question_ar: string
+  question_en: string | null
+  answer_ar: string
+  answer_en: string | null
+  status: PublishStatus
+  is_featured: boolean
+  sort_order: number
+  created_at: string
+  updated_at: string
+}
+
 export type WaitlistSubscriber = {
   id: string
   email: string
@@ -326,6 +340,7 @@ export type Database = {
       event_registrations: Table<EventRegistration>
       posts: Table<Post>
       banners: Table<Banner>
+      faqs: Table<Faq>
       waitlist_subscribers: Table<WaitlistSubscriber>
       audit_log: Table<AuditLogRow>
     }

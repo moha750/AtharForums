@@ -6,6 +6,8 @@ import { SiteShell } from '@/components/site/site-shell'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
 import { buttonStyles } from '@/components/ui/button'
+import { FaqList } from '@/components/site/faq-list'
+import { getFaqs } from '@/lib/data'
 import { requireLaunched } from '@/lib/gate'
 import { isLocale } from '@/i18n/routing'
 
@@ -24,7 +26,12 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale)
 
   const settings = await requireLaunched(locale)
-  const [t, tMeta] = await Promise.all([getTranslations('about'), getTranslations('meta')])
+  const [t, tMeta, tFaq, faqs] = await Promise.all([
+    getTranslations('about'),
+    getTranslations('meta'),
+    getTranslations('faq'),
+    getFaqs(true),
+  ])
 
   const about = locale === 'en' ? settings.about_en : settings.about_ar
   const Arrow = locale === 'en' ? ArrowRight : ArrowLeft
@@ -61,6 +68,22 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
             ))}
           </ol>
         </section>
+
+        {faqs.length > 0 ? (
+          <section className="mt-12" aria-labelledby="faq">
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <h2 id="faq" className="text-2xl font-semibold">
+                {tFaq('heading')}
+              </h2>
+              <Link href="/faq" className="text-sm font-medium text-[var(--primary)] hover:underline">
+                {tFaq('seeAll')}
+              </Link>
+            </div>
+            <div className="mt-5">
+              <FaqList items={faqs} locale={locale} />
+            </div>
+          </section>
+        ) : null}
 
         <section className="mt-12 rounded-2xl bg-athar-gradient p-7 text-white sm:p-9" aria-labelledby="join">
           <h2 id="join" className="text-2xl font-semibold">

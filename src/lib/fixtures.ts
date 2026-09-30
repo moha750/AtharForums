@@ -1,6 +1,7 @@
 import type {
   AtharEvent,
   Banner,
+  Faq,
   Forum,
   ForumMemberPublic,
   PlatformStats,
@@ -237,6 +238,22 @@ export const fixtureBanners: Banner[] = [
     ends_at: null,
     sort_order: 10,
     created_by: null,
+    created_at: '2026-09-27T09:00:00Z',
+    updated_at: '2026-09-27T09:00:00Z',
+  },
+]
+
+export const fixtureFaqs: Faq[] = [
+  {
+    id: 'f1',
+    slug: 'what-is-athar',
+    question_ar: 'ما مساحة أثر؟',
+    question_en: 'What is Athar Space?',
+    answer_ar: 'مبادرة داخلية تجمع منسوبي الوزارة حول ما يجيدونه وما يحبّونه.',
+    answer_en: 'An internal initiative bringing Ministry colleagues together around what they are good at.',
+    status: 'published',
+    is_featured: true,
+    sort_order: 10,
     created_at: '2026-09-27T09:00:00Z',
     updated_at: '2026-09-27T09:00:00Z',
   },

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import {
   fixtureBanners,
   fixtureEvents,
+  fixtureFaqs,
   fixtureForums,
   fixtureMembers,
   fixturePosts,
@@ -11,6 +12,7 @@ import {
 import type {
   AtharEvent,
   Banner,
+  Faq,
   Forum,
   ForumMemberPublic,
   ForumMembership,
@@ -204,4 +206,24 @@ export async function getLiveBanners(): Promise<Banner[]> {
     .order('sort_order', { ascending: true })
   if (error) console.error('[athar] استعلام فشل', error)
   return (data as Banner[]) ?? []
+}
+
+/**
+ * الأسئلة المنشورة.
+ *
+ * `featuredOnly` للمختصر في صفحة «عن أثر». والشرط مكرّر هنا رغم السياسة:
+ * المشرف يقرأ كل الصفوف بسياسته، فبدونه يرى مسوّداته في الصفحة العامّة.
+ */
+export async function getFaqs(featuredOnly = false): Promise<Faq[]> {
+  if (previewMode) return featuredOnly ? fixtureFaqs.filter((f) => f.is_featured) : fixtureFaqs
+  const supabase = await createClient()
+  let query = supabase
+    .from('faqs')
+    .select('*')
+    .eq('status', 'published')
+    .order('sort_order', { ascending: true })
+  if (featuredOnly) query = query.eq('is_featured', true)
+  const { data, error } = await query
+  if (error) console.error('[athar] استعلام فشل', error)
+  return (data as Faq[]) ?? []
 }

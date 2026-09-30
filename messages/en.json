@@ -20,7 +20,8 @@
     "logout": "Sign out",
     "menu": "Menu",
     "closeMenu": "Close menu",
-    "skipToContent": "Skip to content"
+    "skipToContent": "Skip to content",
+    "faq": "FAQ"
   },
   "teaser": {
     "badge": "Coming soon",
@@ -203,6 +204,14 @@
     "joinLead": "Pick your space and send an application.",
     "contactHeading": "Contact us"
   },
+  "faq": {
+    "heading": "Frequently asked questions",
+    "lead": "What colleagues most often ask about Athar Space and joining it.",
+    "empty": "No published questions yet.",
+    "seeAll": "All questions",
+    "stillHeading": "Didn't find your question?",
+    "stillLead": "Write to us and we'll add the answer here."
+  },
   "dashboard": {
     "heading": "My account",
     "welcome": "Welcome {name}",
@@ -338,7 +347,19 @@
     "bannerTextGroup": "Text over the image — optional",
     "bannerTextHint": "Leave it all empty when the design lives inside the image. The image then shows on its own, with no darkening.",
     "bannerNoTitle": "Image-only banner",
-    "uploadRatioNote": "This image is {width}×{height} — its ratio differs from 8:3, so the edges will be cropped."
+    "uploadRatioNote": "This image is {width}×{height} — its ratio differs from 8:3, so the edges will be cropped.",
+    "navFaq": "FAQ",
+    "faqLead": "Shown on /faq, and the featured ones also on the About page.",
+    "faqEmpty": "No questions yet.",
+    "faqNew": "New question",
+    "faqQuestionAr": "Question (Arabic)",
+    "faqQuestionEn": "Question (English)",
+    "faqAnswerAr": "Answer (Arabic)",
+    "faqAnswerEn": "Answer (English)",
+    "faqSlugHint": "— internal key, never shown to visitors",
+    "faqFeatured": "Featured",
+    "faqFeaturedHint": "Also appears in the short list on the About page.",
+    "faqErrDuplicate": "That key is already used by another question."
   },
   "analytics": {
     "heading": "Visitor analytics",

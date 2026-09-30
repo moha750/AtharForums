@@ -46,6 +46,7 @@ export default async function AdminLayout({
     { key: 'events' as const, href: '/admin/events', label: t('navEvents') },
     { key: 'news' as const, href: '/admin/news', label: t('navNews') },
     { key: 'banners' as const, href: '/admin/banners', label: t('navBanners') },
+    { key: 'faq' as const, href: '/admin/faq', label: t('navFaq') },
     { key: 'waitlist' as const, href: '/admin/waitlist', label: t('navWaitlist') },
     { key: 'analytics' as const, href: '/admin/analytics', label: t('navAnalytics') },
     { key: 'settings' as const, href: '/admin/settings', label: t('navSettings') },

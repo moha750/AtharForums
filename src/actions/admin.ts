@@ -467,3 +467,62 @@ export async function deleteBanner(formData: FormData) {
   if (error) console.error('[athar] deleteBanner failed', error)
   revalidatePath('/', 'layout')
 }
+
+/* ── الأسئلة الشائعة ────────────────────────────────────────────────────── */
+
+const faqSchema = z.object({
+  id: z.string().uuid().optional(),
+  slug,
+  question_ar: z.string().trim().min(4).max(240),
+  question_en: optional(240),
+  answer_ar: z.string().trim().min(4).max(2000),
+  answer_en: optional(2000),
+  status: z.enum(['draft', 'published', 'archived']),
+  is_featured: z.string().optional(),
+  sort_order: z.coerce.number().int().min(0).max(9999).optional(),
+})
+
+export async function saveFaq(_prev: AdminState, formData: FormData): Promise<AdminState> {
+  try {
+    await requireAdmin()
+  } catch {
+    return { status: 'error', message: 'forbidden' }
+  }
+
+  const parsed = faqSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) return { status: 'error', message: 'invalid' }
+  const d = parsed.data
+
+  const payload = {
+    slug: d.slug,
+    question_ar: d.question_ar,
+    question_en: clean(d.question_en),
+    answer_ar: d.answer_ar,
+    answer_en: clean(d.answer_en),
+    status: d.status,
+    is_featured: d.is_featured === 'on',
+    sort_order: d.sort_order ?? 100,
+  }
+
+  const supabase = await createClient()
+  const { error } = d.id
+    ? await supabase.from('faqs').update(payload).eq('id', d.id)
+    : await supabase.from('faqs').insert(payload)
+
+  if (error) {
+    return { status: 'error', message: error.code === '23505' ? 'duplicate-slug' : error.message }
+  }
+
+  revalidatePath('/', 'layout')
+  redirect(`/${localeOf(formData)}/admin/faq`)
+}
+
+export async function deleteFaq(formData: FormData) {
+  await requireAdmin()
+  const id = String(formData.get('id') ?? '')
+  if (!id) return
+  const supabase = await createClient()
+  const { error } = await supabase.from('faqs').delete().eq('id', id)
+  if (error) console.error('[athar] deleteFaq failed', error)
+  revalidatePath('/', 'layout')
+}

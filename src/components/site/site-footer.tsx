@@ -14,6 +14,7 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
     { href: '/events', label: tNav('events') },
     { href: '/news', label: tNav('news') },
     { href: '/about', label: tNav('about') },
+    { href: '/faq', label: tNav('faq') },
   ] as const
 
   return (
