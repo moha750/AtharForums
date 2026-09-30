@@ -5,6 +5,7 @@ import {
   fixtureApplications,
   fixtureBanners,
   fixtureBoard,
+  fixtureContactMessages,
   fixtureFaqs,
   fixtureEvents,
   fixtureForums,
@@ -17,6 +18,7 @@ import type {
   AtharEvent,
   Banner,
   BoardMember,
+  ContactMessage,
   Faq,
   Forum,
   ForumMembership,
@@ -122,6 +124,23 @@ export async function adminWaitlist(): Promise<WaitlistSubscriber[]> {
   return (data as WaitlistSubscriber[]) ?? []
 }
 
+/** الوارد: الجديد والمقروء، الأحدث أوّلًا. الأرشيف وحده. */
+export async function adminContactMessages(view: 'inbox' | 'archive'): Promise<ContactMessage[]> {
+  if (previewMode)
+    return fixtureContactMessages.filter((m) =>
+      view === 'archive' ? m.status === 'archived' : m.status !== 'archived'
+    )
+  const supabase = await createClient()
+  let query = supabase
+    .from('contact_messages')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(500)
+  query = view === 'archive' ? query.eq('status', 'archived') : query.neq('status', 'archived')
+  const { data } = await query
+  return (data as ContactMessage[]) ?? []
+}
+
 export async function adminSettings() {
   if (previewMode)
     return {
@@ -138,9 +157,15 @@ export async function adminSettings() {
 
 export async function adminOverview() {
   if (previewMode)
-    return { forums: fixtureForums.length, pending: 1, members: 177, waitlist: 2 }
+    return {
+      forums: fixtureForums.length,
+      pending: 1,
+      members: 177,
+      waitlist: 2,
+      messages: fixtureContactMessages.filter((m) => m.status === 'new').length,
+    }
   const supabase = await createClient()
-  const [forums, pending, members, waitlist] = await Promise.all([
+  const [forums, pending, members, waitlist, messages] = await Promise.all([
     supabase.from('forums').select('id', { count: 'exact', head: true }).eq('status', 'published'),
     supabase
       .from('forum_memberships')
@@ -151,6 +176,10 @@ export async function adminOverview() {
       .select('id', { count: 'exact', head: true })
       .eq('status', 'approved'),
     supabase.from('waitlist_subscribers').select('id', { count: 'exact', head: true }),
+    supabase
+      .from('contact_messages')
+      .select('id', { count: 'exact', head: true })
+      .eq('status', 'new'),
   ])
 
   return {
@@ -158,6 +187,7 @@ export async function adminOverview() {
     pending: pending.count ?? 0,
     members: members.count ?? 0,
     waitlist: waitlist.count ?? 0,
+    messages: messages.count ?? 0,
   }
 }
 

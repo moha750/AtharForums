@@ -1,4 +1,4 @@
-import { CalendarDays, LayoutGrid, Mail, UserCheck, Users } from 'lucide-react'
+import { CalendarDays, Inbox, LayoutGrid, Mail, UserCheck, Users } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 
 import { Link } from '@/i18n/navigation'
@@ -18,6 +18,13 @@ export default async function AdminOverviewPage() {
       Icon: UserCheck,
       highlight: stats.pending > 0,
     },
+    {
+      value: stats.messages,
+      label: t('statMessages'),
+      href: '/admin/messages',
+      Icon: Inbox,
+      highlight: stats.messages > 0,
+    },
     { value: stats.members, label: t('statMembers'), href: '/admin/members', Icon: Users },
     { value: stats.waitlist, label: t('statWaitlist'), href: '/admin/waitlist', Icon: Mail },
   ]
@@ -26,7 +33,7 @@ export default async function AdminOverviewPage() {
     <div>
       <h1 className="text-2xl font-semibold">{t('navOverview')}</h1>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {cards.map(({ value, label, href, Icon, highlight }) => (
           <Link
             key={href}

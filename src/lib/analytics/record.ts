@@ -157,6 +157,7 @@ export const CONVERSIONS = {
   eventRegistration: 'event_registration',
   magicLinkRequested: 'magic_link_requested',
   profileCompleted: 'profile_completed',
+  contactMessage: 'contact_message',
 } as const
 
 export type ConversionName = (typeof CONVERSIONS)[keyof typeof CONVERSIONS]

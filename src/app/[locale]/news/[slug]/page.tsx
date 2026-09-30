@@ -35,7 +35,7 @@ export default async function PostPage({
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const settings = await requireLaunched(locale)
+  await requireLaunched(locale)
   const post = await getPostBySlug(slug)
   if (!post || post.status !== 'published') notFound()
 
@@ -47,7 +47,7 @@ export default async function PostPage({
   const body = localized(post, 'body', locale)
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <article className="container-athar max-w-3xl py-12 sm:py-16">
         {forum ? (
           <Link href={`/forums/${forum.slug}`}>

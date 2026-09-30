@@ -5,11 +5,12 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { SiteShell } from '@/components/site/site-shell'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
-import { buttonStyles } from '@/components/ui/button'
+import { ContactForm } from '@/components/contact/contact-form'
 import { FaqList } from '@/components/site/faq-list'
 import { BoardStructure } from '@/components/site/board-structure'
 import { getBoard, getFaqs } from '@/lib/data'
 import { requireLaunched } from '@/lib/gate'
+import { getCurrentProfile } from '@/lib/auth'
 import { isLocale } from '@/i18n/routing'
 
 export const dynamic = 'force-dynamic'
@@ -27,21 +28,29 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale)
 
   const settings = await requireLaunched(locale)
-  const [t, tMeta, tFaq, tBoard, faqs, board] = await Promise.all([
+  const [t, tMeta, tFaq, tBoard, tContact, faqs, board, profile] = await Promise.all([
     getTranslations('about'),
     getTranslations('meta'),
     getTranslations('faq'),
     getTranslations('board'),
+    getTranslations('contact'),
     getFaqs(true),
     getBoard(),
+    getCurrentProfile(),
   ])
 
   const about = locale === 'en' ? settings.about_en : settings.about_ar
+  // الاسم وحده يُملأ مسبقًا — لا جزء البريد الذي يعود إليه displayName عند غياب الاسم
+  const accountName =
+    (locale === 'en' ? profile?.full_name_en : profile?.full_name_ar) ||
+    profile?.full_name_ar ||
+    profile?.full_name_en ||
+    undefined
   const Arrow = locale === 'en' ? ArrowRight : ArrowLeft
   const steps = [t('howOne'), t('howTwo'), t('howThree'), t('howFour')]
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar max-w-3xl py-12 sm:py-16">
         <Logo variant="full" className="h-28" alt={tMeta('siteName')} />
 
@@ -114,22 +123,30 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
           </Link>
         </section>
 
-        {settings.contact_email ? (
-          <section className="mt-10" aria-labelledby="contact">
-            <h2 id="contact" className="text-xl font-semibold">
-              {t('contactHeading')}
-            </h2>
-            <a
-              href={`mailto:${settings.contact_email}`}
-              className={`${buttonStyles('secondary', 'md')} mt-3`}
-            >
+        <section className="mt-12 scroll-mt-24" id="contact" aria-labelledby="contact-heading">
+          <h2 id="contact-heading" className="text-xl font-semibold">
+            {t('contactHeading')}
+          </h2>
+          <p className="mt-2 leading-relaxed text-[var(--fg-muted)]">{tContact('lead')}</p>
+
+          <div className="mt-5 rounded-2xl bg-[var(--surface)] p-5 ring-1 ring-[var(--border)] sm:p-7">
+            <ContactForm locale={locale} defaultName={accountName} accountEmail={profile?.email} />
+          </div>
+
+          {settings.contact_email ? (
+            <p className="mt-4 flex flex-wrap items-center gap-1.5 text-sm text-[var(--fg-subtle)]">
               <Mail className="size-4" aria-hidden />
-              <span dir="ltr" className="font-latin">
+              {tContact('orEmail')}
+              <a
+                href={`mailto:${settings.contact_email}`}
+                dir="ltr"
+                className="font-latin text-[var(--fg-muted)] underline-offset-4 hover:text-[var(--fg)] hover:underline"
+              >
                 {settings.contact_email}
-              </span>
-            </a>
-          </section>
-        ) : null}
+              </a>
+            </p>
+          ) : null}
+        </section>
       </div>
     </SiteShell>
   )

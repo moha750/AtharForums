@@ -21,11 +21,11 @@ export default async function ForumsPage({ params }: { params: Promise<{ locale:
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const settings = await requireLaunched(locale)
+  await requireLaunched(locale)
   const [forums, t] = await Promise.all([getPublishedForums(), getTranslations('forums')])
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <header className="max-w-2xl">
           <h1 className="text-3xl font-bold sm:text-4xl">{t('heading')}</h1>

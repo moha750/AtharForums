@@ -40,7 +40,7 @@ export default async function EventPage({
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const settings = await requireLaunched(locale)
+  await requireLaunched(locale)
   const event = await getEventBySlug(slug)
   if (!event || event.status !== 'published') notFound()
 
@@ -72,7 +72,7 @@ export default async function EventPage({
     event.mode === 'online' ? t('online') : event.mode === 'hybrid' ? t('hybrid') : t('onsite')
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
           <article>

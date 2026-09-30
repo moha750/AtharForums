@@ -27,7 +27,7 @@ export default async function FaqPage({ params }: { params: Promise<{ locale: st
   ])
 
   return (
-    <SiteShell settings={settings} locale={locale}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <header className="mx-auto max-w-2xl text-center">
           <h1 className="text-3xl font-bold sm:text-4xl">{t('heading')}</h1>

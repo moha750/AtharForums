@@ -10,7 +10,6 @@ import { ProfileForm } from '@/components/dashboard/profile-form'
 import { signOut } from '@/actions/auth'
 import { getCurrentProfile, displayName } from '@/lib/auth'
 import { getMyMemberships, getMyEventRegistrations } from '@/lib/data'
-import { getPublicSettings } from '@/lib/settings'
 import { formatDateTime, localized } from '@/lib/utils'
 import { isLocale } from '@/i18n/routing'
 import type { MembershipStatus } from '@/lib/database.types'
@@ -36,10 +35,9 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     return null
   }
 
-  const [t, tNav, settings, memberships, registrations] = await Promise.all([
+  const [t, tNav, memberships, registrations] = await Promise.all([
     getTranslations('dashboard'),
     getTranslations('nav'),
-    getPublicSettings(),
     getMyMemberships(),
     getMyEventRegistrations(),
   ])
@@ -54,7 +52,7 @@ export default async function DashboardPage({ params }: { params: Promise<{ loca
     })[status]
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div>

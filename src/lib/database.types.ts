@@ -9,6 +9,8 @@ export type PublishStatus = 'draft' | 'published' | 'archived'
 export type EventMode = 'onsite' | 'online' | 'hybrid'
 export type RegistrationStatus = 'registered' | 'waitlisted' | 'cancelled'
 export type ForumColor = 'teal' | 'sage' | 'ember'
+export type ContactTopic = 'inquiry' | 'suggestion' | 'technical' | 'other'
+export type ContactStatus = 'new' | 'read' | 'archived'
 
 export type Json = string | number | boolean | null | { [key: string]: Json } | Json[]
 
@@ -314,6 +316,21 @@ export type WaitlistSubscriber = {
   created_at: string
 }
 
+export type ContactMessage = {
+  id: string
+  /** فارغ حين يرسل زائر غير مسجَّل الدخول. */
+  profile_id: string | null
+  full_name: string
+  email: string
+  topic: ContactTopic
+  body: string
+  locale: 'ar' | 'en'
+  status: ContactStatus
+  handled_by: string | null
+  handled_at: string | null
+  created_at: string
+}
+
 export type AuditLogRow = {
   id: number
   actor_id: string | null
@@ -363,6 +380,7 @@ export type Database = {
       faqs: Table<Faq>
       board_members: Table<BoardMember>
       waitlist_subscribers: Table<WaitlistSubscriber>
+      contact_messages: Table<ContactMessage>
       audit_log: Table<AuditLogRow>
     }
     Views: { [_ in never]: never }
@@ -382,6 +400,16 @@ export type Database = {
       forum_members_public: {
         Args: { target_slug: string }
         Returns: ForumMemberPublic[]
+      }
+      submit_contact_message: {
+        Args: {
+          sender_name: string | null
+          sender_email: string | null
+          message_topic: string
+          message_body: string
+          message_locale?: string
+        }
+        Returns: undefined
       }
       join_waitlist: {
         Args: {

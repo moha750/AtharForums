@@ -52,7 +52,7 @@ export default async function ForumPage({
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const settings = await requireLaunched(locale)
+  await requireLaunched(locale)
   const forum = await getForumBySlug(slug)
   if (!forum || forum.status !== 'published') notFound()
 
@@ -76,7 +76,7 @@ export default async function ForumPage({
     role === 'lead' ? t('roleLead') : role === 'core' ? t('roleCore') : t('roleMember')
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem]">
           <div>

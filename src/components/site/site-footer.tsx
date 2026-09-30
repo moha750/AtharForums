@@ -2,9 +2,8 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
 import { MinistryLogo } from '@/components/ministry-logo'
-import type { PublicSettings } from '@/lib/database.types'
 
-export async function SiteFooter({ settings }: { settings: PublicSettings }) {
+export async function SiteFooter() {
   const t = await getTranslations('footer')
   const tNav = await getTranslations('nav')
   const tMeta = await getTranslations('meta')
@@ -41,14 +40,12 @@ export async function SiteFooter({ settings }: { settings: PublicSettings }) {
               {link.label}
             </Link>
           ))}
-          {settings.contact_email ? (
-            <a
-              href={`mailto:${settings.contact_email}`}
-              className="text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
-            >
-              {t('contact')}
-            </a>
-          ) : null}
+          <Link
+            href="/about#contact"
+            className="text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+          >
+            {t('contact')}
+          </Link>
         </nav>
       </div>
 

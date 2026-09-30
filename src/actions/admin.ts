@@ -611,3 +611,32 @@ export async function deleteBoardMember(formData: FormData) {
   if (error) console.error('[athar] deleteBoardMember failed', error)
   revalidatePath('/', 'layout')
 }
+
+/* ── رسائل التواصل ──────────────────────────────────────────────────────── */
+
+const contactStatus = z.enum(['new', 'read', 'archived'])
+
+/** من ختم الحالة ومتى — يتولّاه المحفّز في القاعدة، لا هذا الكود. */
+export async function setContactStatus(formData: FormData) {
+  await requireAdmin()
+  const id = String(formData.get('id') ?? '')
+  const status = contactStatus.safeParse(formData.get('status'))
+  if (!id || !status.success) return
+  const supabase = await createClient()
+  const { error, count } = await supabase
+    .from('contact_messages')
+    .update({ status: status.data }, { count: 'exact' })
+    .eq('id', id)
+  if (error || count === 0) console.error('[athar] setContactStatus failed', { error, count, id })
+  revalidatePath('/', 'layout')
+}
+
+export async function deleteContactMessage(formData: FormData) {
+  await requireAdmin()
+  const id = String(formData.get('id') ?? '')
+  if (!id) return
+  const supabase = await createClient()
+  const { error } = await supabase.from('contact_messages').delete().eq('id', id)
+  if (error) console.error('[athar] deleteContactMessage failed', error)
+  revalidatePath('/', 'layout')
+}

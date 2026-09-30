@@ -27,7 +27,7 @@ export default async function IndexPage({ params }: { params: Promise<{ locale: 
   }
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <HomePage locale={locale} settings={settings} />
     </SiteShell>
   )

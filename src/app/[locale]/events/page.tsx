@@ -21,7 +21,7 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
   if (!isLocale(locale)) notFound()
   setRequestLocale(locale)
 
-  const settings = await requireLaunched(locale)
+  await requireLaunched(locale)
   const [t, upcoming, past] = await Promise.all([
     getTranslations('events'),
     getUpcomingEvents(24),
@@ -35,7 +35,7 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
     mode === 'online' ? t('online') : mode === 'hybrid' ? t('hybrid') : t('onsite')
 
   return (
-    <SiteShell locale={locale} settings={settings}>
+    <SiteShell locale={locale}>
       <div className="container-athar py-12 sm:py-16">
         <header className="max-w-2xl">
           <h1 className="text-3xl font-bold sm:text-4xl">{t('heading')}</h1>
