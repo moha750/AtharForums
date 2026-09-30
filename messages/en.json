@@ -131,7 +131,12 @@
     "errorRate": "Too many attempts. Wait a minute and try again.",
     "errorGeneric": "Could not send the link. Please try again shortly.",
     "errorLink": "This link has expired or was already used. Request a new one.",
-    "noticeWhyEmail": "No passwords — nothing to forget, nothing to leak."
+    "noticeWhyEmail": "A sign-in link is quicker than a password — and nothing to forget.",
+    "passwordLabel": "Password",
+    "passwordSubmit": "Sign in",
+    "usePassword": "Sign in with a password",
+    "useMagicLink": "Sign in with an email link",
+    "errorCredentials": "Incorrect email or password."
   },
   "common": {
     "loading": "Loading…",

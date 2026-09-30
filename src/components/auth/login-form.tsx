@@ -1,25 +1,35 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { Loader2, MailCheck, ShieldCheck } from 'lucide-react'
-import { requestMagicLink, type LoginState } from '@/actions/auth'
+import { KeyRound, Loader2, Mail, MailCheck, ShieldCheck } from 'lucide-react'
+import {
+  requestMagicLink,
+  signInWithPassword,
+  type LoginState,
+  type PasswordState,
+} from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input, Label } from '@/components/ui/field'
 
 const initial: LoginState = { status: 'idle' }
+const initialPassword: PasswordState = { status: 'idle' }
 
 export function LoginForm({
   next,
   ministry,
   linkError,
+  locale,
 }: {
   next?: string
   ministry: string
   linkError?: boolean
+  locale: string
 }) {
   const t = useTranslations('auth')
   const [state, action, pending] = useActionState(requestMagicLink, initial)
+  const [pwState, pwAction, pwPending] = useActionState(signInWithPassword, initialPassword)
+  const [withPassword, setWithPassword] = useState(false)
 
   if (state.status === 'sent') {
     return (
@@ -50,6 +60,70 @@ export function LoginForm({
           </Button>
         </form>
       </div>
+    )
+  }
+
+  if (withPassword) {
+    return (
+      <form action={pwAction} className="space-y-4" noValidate>
+        <div className="space-y-1.5">
+          <Label htmlFor="pw-email">{t('emailLabel')}</Label>
+          <Input
+            id="pw-email"
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="username"
+            dir="ltr"
+            required
+            autoFocus
+            placeholder={t('emailPlaceholder')}
+            className="text-start"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="pw-password">{t('passwordLabel')}</Label>
+          <Input
+            id="pw-password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+            dir="ltr"
+            required
+            minLength={8}
+            className="text-start"
+          />
+        </div>
+
+        <input type="hidden" name="locale" value={locale} />
+        {next ? <input type="hidden" name="next" value={next} /> : null}
+
+        <Button type="submit" disabled={pwPending} className="w-full">
+          {pwPending ? <Loader2 className="size-4 animate-spin" aria-hidden /> : null}
+          {t('passwordSubmit')}
+        </Button>
+
+        {pwState.status === 'error' ? (
+          <p
+            role="alert"
+            className="rounded-lg bg-[var(--danger-soft)] px-3 py-2 text-sm text-[var(--danger)]"
+          >
+            {t(pwState.key ?? 'errorCredentials')}
+          </p>
+        ) : null}
+
+        <button
+          type="button"
+          onClick={() => setWithPassword(false)}
+          className="mx-auto flex items-center gap-1.5 text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+        >
+          <Mail className="size-4" aria-hidden />
+          {t('useMagicLink')}
+        </button>
+
+        <p className="text-center text-xs text-[var(--fg-subtle)]">{ministry}</p>
+      </form>
     )
   }
 
@@ -102,6 +176,15 @@ export function LoginForm({
             : t(state.key ?? 'errorGeneric')}
         </p>
       ) : null}
+
+      <button
+        type="button"
+        onClick={() => setWithPassword(true)}
+        className="mx-auto flex items-center gap-1.5 text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
+      >
+        <KeyRound className="size-4" aria-hidden />
+        {t('usePassword')}
+      </button>
 
       <p className="text-center text-xs text-[var(--fg-subtle)]">{ministry}</p>
     </form>

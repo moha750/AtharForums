@@ -2,6 +2,7 @@
 
 import { z } from 'zod'
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { getPublicSettings } from '@/lib/settings'
 import { trackConversion } from '@/lib/analytics/server'
@@ -91,6 +92,62 @@ export async function requestMagicLink(
   } catch {
     return { status: 'error', key: 'errorGeneric', domains }
   }
+}
+
+/* ── الدخول بكلمة مرور ──────────────────────────────────────────────────── */
+
+export type PasswordState = {
+  status: 'idle' | 'error'
+  key?: 'errorCredentials' | 'errorRate' | 'errorGeneric'
+}
+
+const passwordSchema = z.object({
+  email: z.string().trim().toLowerCase().email().max(254),
+  password: z.string().min(8).max(200),
+  next: z.string().max(512).optional(),
+  locale: z.string().max(5).optional(),
+})
+
+/**
+ * مسار جانبيّ لحسابات يُنشئها المشرف الأعلى بنفسه من لوحة Supabase.
+ *
+ * رابط الدخول يبقى الطريق الأوّل — هذا للحالات التي لا يصل فيها بريد:
+ * قبل إعداد SMTP، أو إن تعطّل لاحقًا وأُغلق الباب على الجميع.
+ *
+ * لا فحص نطاق هنا: التسجيل لا يمرّ من هذا الطريق أصلًا، والحساب لا يوجد
+ * إلا إن أنشأه مشرف. وحدّ المحاولات على Supabase لا علينا.
+ *
+ * رسالة الخطأ واحدة للبريد الخطأ ولكلمة المرور الخطأ عمدًا: التفريق
+ * بينهما يكشف أي البُرد مسجَّل في المنصّة.
+ */
+export async function signInWithPassword(
+  _prev: PasswordState,
+  formData: FormData
+): Promise<PasswordState> {
+  const parsed = passwordSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) return { status: 'error', key: 'errorCredentials' }
+
+  try {
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signInWithPassword({
+      email: parsed.data.email,
+      password: parsed.data.password,
+    })
+
+    if (error) {
+      const message = error.message.toLowerCase()
+      if (message.includes('rate') || error.status === 429) {
+        return { status: 'error', key: 'errorRate' }
+      }
+      return { status: 'error', key: 'errorCredentials' }
+    }
+  } catch {
+    return { status: 'error', key: 'errorGeneric' }
+  }
+
+  // خارج try: redirect يعمل برمي استثناء، فلا نبتلعه في catch أعلاه.
+  const locale = parsed.data.locale === 'en' ? 'en' : 'ar'
+  redirect(`/${locale}${safeNext(parsed.data.next) ?? '/me'}`)
 }
 
 export async function signOut() {
