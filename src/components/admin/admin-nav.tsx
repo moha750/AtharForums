@@ -3,6 +3,7 @@
 import {
   BarChart3,
   CalendarDays,
+  Images,
   LayoutGrid,
   Mail,
   Newspaper,
@@ -23,6 +24,7 @@ const ICONS = {
   members: Users,
   events: CalendarDays,
   news: Newspaper,
+  banners: Images,
   waitlist: Mail,
   analytics: BarChart3,
   settings: Settings,

@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import {
+  fixtureBanners,
   fixtureEvents,
   fixtureForums,
   fixtureMembers,
@@ -9,6 +10,7 @@ import {
 } from '@/lib/fixtures'
 import type {
   AtharEvent,
+  Banner,
   Forum,
   ForumMemberPublic,
   ForumMembership,
@@ -180,4 +182,26 @@ export async function getMyEventRegistrations(): Promise<
     .order('created_at', { ascending: false })
   if (error) console.error('[athar] استعلام فشل', error)
   return (data as unknown as Array<{ id: string; status: string; events: AtharEvent }>) ?? []
+}
+
+/**
+ * بانرات الشريط الظاهرة الآن.
+ *
+ * الشروط مكرّرة هنا رغم وجودها في سياسة الصفّ: السياسة تسمح للمشرف بقراءة
+ * كل الصفوف، فبدون هذه المرشّحات يرى المشرف مسوّداته على الصفحة العامّة
+ * ويظنّها منشورة.
+ */
+export async function getLiveBanners(): Promise<Banner[]> {
+  if (previewMode) return fixtureBanners
+  const supabase = await createClient()
+  const now = new Date().toISOString()
+  const { data, error } = await supabase
+    .from('banners')
+    .select('*')
+    .eq('status', 'published')
+    .or(`starts_at.is.null,starts_at.lte.${now}`)
+    .or(`ends_at.is.null,ends_at.gt.${now}`)
+    .order('sort_order', { ascending: true })
+  if (error) console.error('[athar] استعلام فشل', error)
+  return (data as Banner[]) ?? []
 }

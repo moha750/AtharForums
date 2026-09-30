@@ -1,5 +1,6 @@
 import type {
   AtharEvent,
+  Banner,
   Forum,
   ForumMemberPublic,
   PlatformStats,
@@ -213,6 +214,29 @@ export const fixturePosts: Post[] = [
     status: 'published',
     published_at: '2026-09-27T09:00:00Z',
     author_id: null,
+    created_at: '2026-09-27T09:00:00Z',
+    updated_at: '2026-09-27T09:00:00Z',
+  },
+]
+
+export const fixtureBanners: Banner[] = [
+  {
+    id: 'b1',
+    image_url: '/athar-logo.svg',
+    image_alt_ar: null,
+    image_alt_en: null,
+    title_ar: 'التسجيل في المساحات مفتوح',
+    title_en: 'Registration is open',
+    body_ar: 'اختر مساحتك وانضمّ إلى زملائك قبل نهاية الشهر.',
+    body_en: 'Pick your space and join your colleagues before the month ends.',
+    cta_label_ar: 'تصفّح المساحات',
+    cta_label_en: 'Browse the spaces',
+    cta_href: '/forums',
+    status: 'published',
+    starts_at: null,
+    ends_at: null,
+    sort_order: 10,
+    created_by: null,
     created_at: '2026-09-27T09:00:00Z',
     updated_at: '2026-09-27T09:00:00Z',
   },

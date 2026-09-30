@@ -248,6 +248,27 @@ export type Post = {
   updated_at: string
 }
 
+export type Banner = {
+  id: string
+  image_url: string
+  image_alt_ar: string | null
+  image_alt_en: string | null
+  title_ar: string
+  title_en: string | null
+  body_ar: string | null
+  body_en: string | null
+  cta_label_ar: string | null
+  cta_label_en: string | null
+  cta_href: string | null
+  status: PublishStatus
+  starts_at: string | null
+  ends_at: string | null
+  sort_order: number
+  created_by: string | null
+  created_at: string
+  updated_at: string
+}
+
 export type WaitlistSubscriber = {
   id: string
   email: string
@@ -303,6 +324,7 @@ export type Database = {
       events: Table<AtharEvent>
       event_registrations: Table<EventRegistration>
       posts: Table<Post>
+      banners: Table<Banner>
       waitlist_subscribers: Table<WaitlistSubscriber>
       audit_log: Table<AuditLogRow>
     }

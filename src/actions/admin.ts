@@ -366,3 +366,102 @@ export async function deletePost(formData: FormData) {
   if (error) console.error('[athar] deletePost failed', error)
   revalidatePath('/', 'layout')
 }
+
+/* ── البانرات ───────────────────────────────────────────────────────────── */
+
+/**
+ * حقل datetime-local يعطي وقتًا بلا منطقة زمنية، و`new Date()` يفسّره بتوقيت
+ * الخادم — وهو UTC على Vercel. فبانر يُجدوَل «الساعة ٨ مساءً» كان سيظهر
+ * الحادية عشرة ليلًا بتوقيت الرياض. نثبّت المنطقة صراحةً: السعودية على
+ * ‎+03:00‎ طوال السنة بلا توقيت صيفي، فالتحويل مباشر.
+ */
+const RIYADH_OFFSET = '+03:00'
+
+function toInstant(value: string | undefined): string | null {
+  if (!value || value.trim() === '') return null
+  const withSeconds = value.length === 16 ? `${value}:00` : value
+  const parsed = new Date(`${withSeconds}${RIYADH_OFFSET}`)
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString()
+}
+
+const bannerSchema = z.object({
+  id: z.string().uuid().optional(),
+  image_url: z.string().trim().min(1).max(600),
+  image_alt_ar: optional(200),
+  image_alt_en: optional(200),
+  title_ar: z.string().trim().min(2).max(160),
+  title_en: optional(160),
+  body_ar: optional(400),
+  body_en: optional(400),
+  cta_label_ar: optional(60),
+  cta_label_en: optional(60),
+  cta_href: optional(600),
+  status: z.enum(['draft', 'published', 'archived']),
+  starts_at: z.string().optional(),
+  ends_at: z.string().optional(),
+  sort_order: z.coerce.number().int().min(0).max(9999).optional(),
+})
+
+export async function saveBanner(_prev: AdminState, formData: FormData): Promise<AdminState> {
+  let profileId: string
+  try {
+    const profile = await requireAdmin()
+    profileId = profile.id
+  } catch {
+    return { status: 'error', message: 'forbidden' }
+  }
+
+  const parsed = bannerSchema.safeParse(Object.fromEntries(formData))
+  if (!parsed.success) return { status: 'error', message: 'invalid' }
+  const d = parsed.data
+
+  // نكرّر قيود الجدول هنا لا ثقةً بالواجهة، بل لنردّ رسالة مفهومة بدل خطأ
+  // قاعدة بيانات خام. القيود في الجدول هي الحارس الأخير وتبقى كما هي.
+  const href = clean(d.cta_href)
+  const label = clean(d.cta_label_ar)
+  if (href && !/^(https?:\/\/|\/)\S*$/.test(href)) {
+    return { status: 'error', message: 'cta-href' }
+  }
+  if (Boolean(href) !== Boolean(label)) return { status: 'error', message: 'cta-pair' }
+
+  const startsAt = toInstant(d.starts_at)
+  const endsAt = toInstant(d.ends_at)
+  if (startsAt && endsAt && endsAt <= startsAt) return { status: 'error', message: 'window' }
+
+  const payload = {
+    image_url: d.image_url,
+    image_alt_ar: clean(d.image_alt_ar),
+    image_alt_en: clean(d.image_alt_en),
+    title_ar: d.title_ar,
+    title_en: clean(d.title_en),
+    body_ar: clean(d.body_ar),
+    body_en: clean(d.body_en),
+    cta_label_ar: label,
+    cta_label_en: href ? clean(d.cta_label_en) : null,
+    cta_href: href,
+    status: d.status,
+    starts_at: startsAt,
+    ends_at: endsAt,
+    sort_order: d.sort_order ?? 100,
+  }
+
+  const supabase = await createClient()
+  const { error } = d.id
+    ? await supabase.from('banners').update(payload).eq('id', d.id)
+    : await supabase.from('banners').insert({ ...payload, created_by: profileId })
+
+  if (error) return { status: 'error', message: error.message }
+
+  revalidatePath('/', 'layout')
+  redirect(`/${localeOf(formData)}/admin/banners`)
+}
+
+export async function deleteBanner(formData: FormData) {
+  await requireAdmin()
+  const id = String(formData.get('id') ?? '')
+  if (!id) return
+  const supabase = await createClient()
+  const { error } = await supabase.from('banners').delete().eq('id', id)
+  if (error) console.error('[athar] deleteBanner failed', error)
+  revalidatePath('/', 'layout')
+}

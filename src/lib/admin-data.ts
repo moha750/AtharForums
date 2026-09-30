@@ -3,6 +3,7 @@ import 'server-only'
 import { createClient } from '@/lib/supabase/server'
 import {
   fixtureApplications,
+  fixtureBanners,
   fixtureEvents,
   fixtureForums,
   fixturePosts,
@@ -12,6 +13,7 @@ import {
 } from '@/lib/fixtures'
 import type {
   AtharEvent,
+  Banner,
   Forum,
   ForumMembership,
   Post,
@@ -153,4 +155,22 @@ export async function adminOverview() {
     members: members.count ?? 0,
     waitlist: waitlist.count ?? 0,
   }
+}
+
+export async function adminBanners(): Promise<Banner[]> {
+  if (previewMode) return fixtureBanners
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('banners')
+    .select('*')
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: false })
+  return (data as Banner[]) ?? []
+}
+
+export async function adminBanner(id: string): Promise<Banner | null> {
+  if (previewMode) return fixtureBanners.find((b) => b.id === id) ?? null
+  const supabase = await createClient()
+  const { data } = await supabase.from('banners').select('*').eq('id', id).maybeSingle()
+  return (data as Banner) ?? null
 }

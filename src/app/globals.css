@@ -442,6 +442,27 @@
     filter: blur(26px);
     animation: athar-glow 2.1s ease-out both;
   }
+
+  /* حجاب البانر: يثقل من جهة النصّ حتى يُقرأ فوق أي صورة، ويرقّ عند الطرف
+     الآخر فتبقى الصورة ظاهرة. تايلويند لا يملك اتجاهًا منطقيًّا للتدرّجات،
+     فنكتب الاتجاهين بأيدينا. */
+  .banner-scrim {
+    background-image: linear-gradient(
+      to right,
+      rgba(6, 26, 22, 0.88) 0%,
+      rgba(6, 26, 22, 0.55) 45%,
+      rgba(6, 26, 22, 0) 78%
+    );
+  }
+
+  [dir="rtl"] .banner-scrim {
+    background-image: linear-gradient(
+      to left,
+      rgba(6, 26, 22, 0.88) 0%,
+      rgba(6, 26, 22, 0.55) 45%,
+      rgba(6, 26, 22, 0) 78%
+    );
+  }
 }
 
 @keyframes athar-pop {

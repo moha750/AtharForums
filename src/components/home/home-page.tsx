@@ -5,7 +5,9 @@ import { Link } from '@/i18n/navigation'
 import { buttonStyles } from '@/components/ui/button'
 import { ForumCard } from '@/components/forums/forum-card'
 import { HeroLogo } from '@/components/home/hero-logo'
+import { BannerStrip, type BannerSlide } from '@/components/home/banner-strip'
 import {
+  getLiveBanners,
   getPublishedForums,
   getPlatformStats,
   getUpcomingEvents,
@@ -26,12 +28,29 @@ export async function HomePage({
   const tForums = await getTranslations('forums')
   const tMeta = await getTranslations('meta')
 
-  const [forums, stats, events, posts] = await Promise.all([
+  const [forums, stats, events, posts, banners] = await Promise.all([
     getPublishedForums(),
     getPlatformStats(),
     getUpcomingEvents(3),
     getPublishedPosts(3),
+    getLiveBanners(),
   ])
+
+  const slides: BannerSlide[] = banners.map((banner) => {
+    const href = banner.cta_href
+    const external = !!href && /^https?:\/\//.test(href)
+    return {
+      id: banner.id,
+      imageUrl: banner.image_url,
+      // النصّ البديل يصف الصورة؛ فإن لم يُكتب فالعنوان أقرب وصف متاح.
+      alt: localized(banner, 'image_alt', locale) || localized(banner, 'title', locale),
+      title: localized(banner, 'title', locale),
+      body: localized(banner, 'body', locale) || null,
+      ctaLabel: localized(banner, 'cta_label', locale) || null,
+      ctaHref: href ? (external ? href : `/${locale}${href}`) : null,
+      external,
+    }
+  })
 
   const Arrow = locale === 'en' ? ArrowRight : ArrowLeft
   const featured = forums.slice(0, 6)
@@ -90,6 +109,20 @@ export async function HomePage({
           </dl>
         </div>
       </section>
+
+      {slides.length > 0 ? (
+        <BannerStrip
+          slides={slides}
+          locale={locale}
+          labels={{
+            region: t('bannersRegion'),
+            previous: t('bannersPrevious'),
+            next: t('bannersNext'),
+            goTo: t('bannersGoTo'),
+            pause: t('bannersPaused'),
+          }}
+        />
+      ) : null}
 
       <section className="container-athar py-16" aria-labelledby="forums-heading">
         <div className="flex flex-wrap items-end justify-between gap-3">

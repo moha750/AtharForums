@@ -59,3 +59,16 @@ export function formatDateTime(value: string | Date, locale: string): string {
     timeZone: 'Asia/Riyadh',
   }).format(date)
 }
+
+/**
+ * ISO بتوقيت UTC → القيمة التي يفهمها حقل datetime-local، بتوقيت الرياض.
+ *
+ * حساب يدويّ لا Intl: النتيجة تُحقن في HTML من الخادم ثمّ يقرأها المتصفّح،
+ * وأي اختلاف بينهما يكسر الترطيب. السعودية على ‎+03:00‎ بلا توقيت صيفي.
+ */
+export function toRiyadhInput(iso: string | null | undefined): string {
+  if (!iso) return ''
+  const ms = new Date(iso).getTime()
+  if (Number.isNaN(ms)) return ''
+  return new Date(ms + 3 * 60 * 60 * 1000).toISOString().slice(0, 16)
+}
