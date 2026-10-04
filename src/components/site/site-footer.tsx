@@ -55,6 +55,7 @@ export async function SiteFooter() {
             © {new Date().getFullYear()} {t('ministryFull')} — {t('rights')}
           </p>
           <p>{t('credit')}</p>
+          <p>{t('devCredit')}</p>
         </div>
       </div>
     </footer>
