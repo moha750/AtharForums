@@ -61,7 +61,7 @@ export const fixtureForums: Forum[] = [
     tagline_ar: 'مهارة تُتقَن، ومسار يتّضح',
     tagline_en: 'A skill sharpened, a path made clear',
     description_ar:
-      'ورش ولقاءات تبني المهارات التي تنفع في العمل وخارجه: العرض والإلقاء، وإدارة المشاريع، والتقنية، وأدوات الإنتاجية. يقودها منسوبو الفرع أنفسهم.',
+      'ورش ولقاءات تبني المهارات التي تنفع في العمل وخارجه: العرض والإلقاء، وإدارة المشاريع، والتقنية، وأدوات الإنتاجية. يقودها الموظفون أنفسهم.',
     description_en:
       'Workshops and sessions that build the skills that matter at work and beyond, led by colleagues themselves.',
     icon: 'TrendingUp',
@@ -267,7 +267,7 @@ export const fixtureBoard: BoardMember[] = (
     ['r1', 'general_manager', 'عبدالله السالم', 'Abdullah Alsalem', null, null, 'يرعى المبادرة ويعتمد توجّهها.', 'Sponsors the initiative and sets its direction.', true],
     ['r2', 'chair', 'نورة الخالدي', 'Noura Alkhalidi', 'رئيسة مجلس إدارة مساحة أثر', 'Chair of the Athar Space Board', 'تقود المجلس وتعتمد المساحات الجديدة وقادتها.', 'Leads the board and approves new spaces and their leads.', true],
     ['r3', 'member', 'فهد العتيبي', 'Fahad Alotaibi', null, null, 'يوثّق قرارات المجلس ويتابع تنفيذها.', 'Records the board’s decisions and follows them through.', false],
-    ['r4', 'member', 'ريم الدوسري', 'Reem Aldosari', 'عضوة إداريّة', null, 'تبني الشراكات مع الإدارات والجهات خارج الفرع.', 'Builds partnerships with departments and bodies beyond the branch.', false],
+    ['r4', 'member', 'ريم الدوسري', 'Reem Aldosari', 'عضوة إداريّة', null, 'تبني الشراكات مع الجهات من خارج أثر.', 'Builds partnerships with bodies beyond Athar.', false],
     ['r5', 'member', 'سلطان الشمري', 'Sultan Alshammari', null, null, 'يدير حضور أثر في القنوات الداخلية.', 'Runs Athar’s presence on internal channels.', false],
   ] as const
 ).map(([id, rank, name_ar, name_en, position_ar, position_en, role_ar, role_en, is_featured], i) => ({
@@ -381,7 +381,7 @@ export const fixtureContactMessages: ContactMessage[] = [
     full_name: 'Sara Ahmed',
     email: 'sara.ahmed@example.com',
     topic: 'inquiry',
-    body: 'Are the events open to employees from other regional branches?',
+    body: 'Are the events open to employees from other regions?',
     locale: 'en',
     status: 'archived',
     handled_by: 'p1',

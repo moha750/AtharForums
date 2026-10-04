@@ -3,7 +3,7 @@
 --
 -- الموقع لم يعد يذكر الوزارة نصًّا ولا شعارًا. نصوص الواجهة عُدّلت في
 -- messages/، وهذا الملف يعالج ما في القاعدة: نبذة «عن أثر»، والأسئلة الشائعة،
--- وأوصاف المساحات المؤرشفة التي تظهر في اللوحة.
+-- وأوصاف المساحات (المنشورة والمؤرشفة)، وذكر «الفرع» حيث يحيل إليها.
 --
 -- الاستبدال موضعيّ بـ replace() لا بإعادة كتابة الحقول، فيبقى ما عدّله
 -- المشرفون حول العبارة كما هو، وتشغيل الملف مرّتين لا يغيّر شيئًا.
@@ -26,44 +26,47 @@ update public.faqs set
     'إذا انتقلت من الوزارة؟', 'إذا انتقلت إلى جهة عمل أخرى؟'),
   question_en = replace(question_en,
     'if I leave the Ministry?', 'if I move to another employer?'),
-  answer_ar = replace(replace(replace(replace(answer_ar,
+  answer_ar = replace(replace(replace(replace(replace(answer_ar,
     'منسوبو فرع وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية، ممّن', 'الموظفون ممّن'),
+    'موظّف من منسوبي الفرع يعيّنه', 'موظّف يعيّنه'),
     'منسوبو الوزارة ممّن', 'الموظفون ممّن'),
     'منسوبي وزارة الموارد البشرية والتنمية الاجتماعية بالمنطقة الشرقية', 'الزملاء'),
     'منسوبي وزارة الموارد البشرية والتنمية الاجتماعية', 'الزملاء'),
-  answer_en = replace(replace(replace(answer_en,
+  answer_en = replace(replace(replace(replace(answer_en,
+    'An employee from the branch, appointed by', 'An employee appointed by'),
     'Colleagues at the Eastern Region branch of the Ministry of Human Resources and Social Development who have', 'Colleagues who have'),
     'Ministry colleagues with an official', 'Colleagues with an official'),
     'colleagues at the Ministry of Human Resources and Social Development together', 'colleagues together')
-where concat_ws(' ', question_ar, question_en, answer_ar, answer_en) ~* '(وزار|ministry)';
+where concat_ws(' ', question_ar, question_en, answer_ar, answer_en) ~* '(وزار|ministry|فرع|branch)';
 
 -- المعرّف يظهر في الرابط (#leaving-ministry) — يُغيَّر ما لم يكن البديل محجوزًا.
 update public.faqs set slug = 'leaving-work'
 where slug = 'leaving-ministry'
   and not exists (select 1 from public.faqs where slug = 'leaving-work');
 
--- ── المساحات المؤرشفة (من بذرة 0005) ───────────────────────────────────────
+-- ── المساحات (المنشورة والمؤرشفة) ─────────────────────────────────────────
 update public.forums set
   tagline_ar = replace(replace(tagline_ar,
     'نحكي قصة الوزارة بصورة وصوت', 'نحكي قصّتنا بصورة وصوت'),
     'أثرٌ يبدأ من الوزارة ويصل أبعد', 'أثرٌ يبدأ من هنا ويصل أبعد'),
   tagline_en = replace(tagline_en,
     'Telling the Ministry''s story in sound and image', 'Telling our story in sound and image'),
-  description_ar = replace(replace(replace(description_ar,
+  description_ar = replace(replace(replace(replace(description_ar,
+    'يقودها منسوبو الفرع أنفسهم', 'يقودها الموظفون أنفسهم'),
     'ننتج معًا موادّ تعرّف بعمل الوزارة', 'ننتج معًا موادّ تعرّف بعملنا'),
     'ونستثمر خبرة منسوبي الوزارة في التنمية الاجتماعية', 'ونستثمر خبراتنا'),
     'تجمع منسوبي الوزارة خارج', 'تجمع الزملاء خارج'),
   description_en = replace(replace(description_en,
     'material that shows the Ministry''s work', 'material that shows our work'),
     'putting the Ministry''s social development expertise directly to work', 'putting our expertise directly to work')
-where concat_ws(' ', tagline_ar, tagline_en, description_ar, description_en) ~* '(وزار|ministry)';
+where concat_ws(' ', tagline_ar, tagline_en, description_ar, description_en) ~* '(وزار|ministry|فرع|branch)';
 
 -- ── ما بقي (إن بقي) يظهر هنا ليُراجَع يدويًّا ─────────────────────────────
 select 'site_settings' as source, null::text as slug, about_ar as text_ar, about_en as text_en
-  from public.site_settings where concat_ws(' ', about_ar, about_en) ~* '(وزار|ministry|human resources)'
+  from public.site_settings where concat_ws(' ', about_ar, about_en) ~* '(وزار|فرع|منسوب|الشرقية|ministry|branch|regional|eastern|human resources|social development)'
 union all
 select 'faqs', slug, question_ar || ' / ' || answer_ar, question_en || ' / ' || answer_en
-  from public.faqs where concat_ws(' ', question_ar, question_en, answer_ar, answer_en) ~* '(وزار|ministry|human resources)'
+  from public.faqs where concat_ws(' ', question_ar, question_en, answer_ar, answer_en) ~* '(وزار|فرع|منسوب|الشرقية|ministry|branch|regional|eastern|human resources|social development)'
 union all
 select 'forums', slug, concat_ws(' / ', name_ar, tagline_ar, description_ar), concat_ws(' / ', name_en, tagline_en, description_en)
-  from public.forums where concat_ws(' ', name_ar, name_en, tagline_ar, tagline_en, description_ar, description_en) ~* '(وزار|ministry|human resources)';
+  from public.forums where concat_ws(' ', name_ar, name_en, tagline_ar, tagline_en, description_ar, description_en) ~* '(وزار|فرع|منسوب|الشرقية|ministry|branch|regional|eastern|human resources|social development)';
