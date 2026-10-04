@@ -3,7 +3,6 @@ import { LayoutDashboard, LogIn, Settings2 } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
-import { MinistryLogo } from '@/components/ministry-logo'
 import { LocaleSwitcher } from '@/components/site/locale-switcher'
 import { MobileNav } from '@/components/site/mobile-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
@@ -40,13 +39,6 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
       </a>
 
       <div className="container-athar flex h-16 items-center gap-3">
-        {/* قاعدة الهوية: إذا اجتمع الشعاران في صفّ واحد تقدّم الوزارة ثم أثر. */}
-        <MinistryLogo
-          variant="symbol"
-          className="hidden h-8 shrink-0 border-e border-[var(--border)] pe-3 sm:inline-block"
-          alt={tMeta('branch')}
-        />
-
         <Link href="/" className="flex shrink-0 items-center gap-2.5">
           <Logo variant="mark" className="h-9" alt={tMeta('siteName')} />
           <span className="hidden text-[0.95rem] font-semibold sm:inline">

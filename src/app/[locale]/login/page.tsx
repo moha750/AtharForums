@@ -48,13 +48,12 @@ export default async function LoginPage({
           <div className="mb-6 space-y-1.5 text-center">
             <h1 className="text-2xl font-semibold">{t('loginHeading')}</h1>
             <p className="text-sm text-[var(--fg-muted)]">
-              {t('loginLead', { ministry: tMeta('ministry') })}
+              {t('loginLead')}
             </p>
           </div>
 
           <LoginForm
             next={next}
-            ministry={tMeta('branch')}
             linkError={error === 'link'}
             locale={locale}
           />

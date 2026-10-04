@@ -1,7 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
-import { MinistryLogo } from '@/components/ministry-logo'
 
 export async function SiteFooter() {
   const t = await getTranslations('footer')
@@ -20,11 +19,7 @@ export async function SiteFooter() {
     <footer className="mt-20 border-t border-[var(--border)] bg-[var(--bg-subtle)]">
       <div className="container-athar grid gap-8 py-10 sm:grid-cols-[1.4fr_1fr]">
         <div className="space-y-4">
-          <div className="flex flex-wrap items-end gap-5">
-            {/* قاعدة الهوية: إذا اجتمع الشعاران في صفّ واحد تقدّم الوزارة ثم أثر. */}
-            <MinistryLogo className="h-16" alt={tMeta('branch')} />
-            <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
-          </div>
+          <Logo variant="full" className="h-20" alt={tMeta('siteName')} />
           <p className="max-w-sm text-sm leading-relaxed text-[var(--fg-muted)]">
             {tMeta('description')}
           </p>
@@ -52,7 +47,7 @@ export async function SiteFooter() {
       <div className="border-t border-[var(--border)]">
         <div className="container-athar space-y-1 py-5 text-center text-xs text-[var(--fg-subtle)]">
           <p>
-            © {new Date().getFullYear()} {t('ministryFull')} — {t('rights')}
+            © {new Date().getFullYear()} {tMeta('siteName')} — {t('rights')}
           </p>
           <p>{t('credit')}</p>
           <p>{t('devCredit')}</p>

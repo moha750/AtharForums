@@ -17,12 +17,10 @@ const initialPassword: PasswordState = { status: 'idle' }
 
 export function LoginForm({
   next,
-  ministry,
   linkError,
   locale,
 }: {
   next?: string
-  ministry: string
   linkError?: boolean
   locale: string
 }) {
@@ -121,8 +119,6 @@ export function LoginForm({
           <Mail className="size-4" aria-hidden />
           {t('useMagicLink')}
         </button>
-
-        <p className="text-center text-xs text-[var(--fg-subtle)]">{ministry}</p>
       </form>
     )
   }
@@ -185,8 +181,6 @@ export function LoginForm({
         <KeyRound className="size-4" aria-hidden />
         {t('usePassword')}
       </button>
-
-      <p className="text-center text-xs text-[var(--fg-subtle)]">{ministry}</p>
     </form>
   )
 }

@@ -2,11 +2,8 @@
   "meta": {
     "siteName": "Athar Space",
     "tagline": "Connection · Knowledge · Impact",
-    "ministry": "Ministry of Human Resources and Social Development",
     "description": "The official platform for Athar Space — bringing colleagues together around what they are good at and what they love.",
-    "hook": "Where the story begins, and the mark is made",
-    "branch": "Eastern Region Branch, Ministry of Human Resources and Social Development",
-    "branchShort": "Eastern Region Branch"
+    "hook": "Where the story begins, and the mark is made"
   },
   "nav": {
     "home": "Home",
@@ -26,7 +23,7 @@
   "teaser": {
     "badge": "Coming soon",
     "heading": "Athar Space",
-    "lead": "A space bringing Ministry employees together around what they are good at and what they love. Pick your space, meet people who share the passion, and leave a mark beyond your desk.",
+    "lead": "A space bringing colleagues together around what they are good at and what they love. Pick your space, meet people who share the passion, and leave a mark beyond your desk.",
     "launchLabel": "Launching in",
     "launchedLabel": "We are live",
     "enterSite": "Enter the platform",
@@ -45,7 +42,7 @@
     "success": "You are on the list. We will write on launch day.",
     "alreadyRegistered": "You are already on the list.",
     "errorInvalid": "Please check the email format.",
-    "errorDomain": "Sign-up is limited to official Ministry email addresses.",
+    "errorDomain": "Sign-up is limited to official work email addresses.",
     "errorGeneric": "Could not sign you up right now. Please try again shortly.",
     "pillars": {
       "heading": "Three steps, no more",
@@ -59,7 +56,7 @@
       },
       "three": {
         "title": "Leave your mark",
-        "body": "Events, workshops and initiatives that start inside the Ministry and reach well beyond it."
+        "body": "Events, workshops and initiatives that start among us and reach well beyond."
       }
     }
   },
@@ -83,7 +80,7 @@
   },
   "forums": {
     "heading": "Spaces",
-    "lead": "Each space is a space led by Ministry employees around a shared discipline or interest.",
+    "lead": "Each space is led by employees themselves around a shared discipline or interest.",
     "searchPlaceholder": "Search by space or skill…",
     "filterAll": "All",
     "empty": "No matching spaces.",
@@ -118,7 +115,7 @@
   },
   "auth": {
     "loginHeading": "Sign in",
-    "loginLead": "Access is limited to {ministry} employees using their official email.",
+    "loginLead": "Access is limited to employees using their official email.",
     "emailLabel": "Official email",
     "emailPlaceholder": "name@hrsd.gov.sa",
     "sendLink": "Send sign-in link",
@@ -127,7 +124,7 @@
     "sentLead": "We sent a sign-in link to <b>{email}</b>. It is valid for one hour.",
     "sentHint": "Nothing arrived? Check your junk folder, or try again in a minute.",
     "resend": "Resend",
-    "errorDomain": "Sign-in is limited to official Ministry email ({domains}).",
+    "errorDomain": "Sign-in is limited to official email ({domains}).",
     "errorRate": "Too many attempts. Wait a minute and try again.",
     "errorGeneric": "Could not send the link. Please try again shortly.",
     "errorLink": "This link has expired or was already used. Request a new one.",
@@ -158,7 +155,6 @@
   },
   "footer": {
     "rights": "All rights reserved",
-    "ministryFull": "Eastern Region Branch, Ministry of Human Resources and Social Development",
     "contact": "Contact us",
     "credit": "An idea by employee Ismail Saleh Al-Matar",
     "devCredit": "Designed and developed by Mohammed Ismail Al-Matar"
@@ -240,7 +236,7 @@
     "heading": "Board",
     "lead": "The team leading Athar Space: it creates the spaces, appoints their leads, and considers your suggestions.",
     "seeAll": "Meet the board",
-    "rankGeneralManager": "General Manager, Eastern Region Branch of the Ministry of Human Resources and Social Development",
+    "rankGeneralManager": "General Manager",
     "rankChair": "Chair of the Athar Space Board",
     "rankMember": "Board Member"
   },

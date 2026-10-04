@@ -2,7 +2,6 @@ import { getTranslations } from 'next-intl/server'
 import { Compass, Sparkles, Users } from 'lucide-react'
 
 import { Logo } from '@/components/logo'
-import { MinistryLogo } from '@/components/ministry-logo'
 import { Badge } from '@/components/ui/badge'
 import { Countdown } from '@/components/teaser/countdown'
 import { WaitlistForm } from '@/components/teaser/waitlist-form'
@@ -50,8 +49,7 @@ export async function TeaserPage({
         <div className="absolute -bottom-40 -start-24 size-[28rem] rounded-full bg-sage-300/30 blur-3xl dark:bg-sage-800/15" />
       </div>
 
-      <header className="container-athar flex items-center justify-between gap-4 py-5">
-        <MinistryLogo className="h-12 sm:h-16" alt={tMeta('branch')} priority />
+      <header className="container-athar flex items-center justify-end gap-4 py-5">
         <div className="flex items-center gap-0.5">
           <LocaleSwitcher current={locale} />
           <ThemeToggle labels={themeLabels} />
@@ -133,7 +131,7 @@ export async function TeaserPage({
 
       <footer className="container-athar border-t border-[var(--border)] py-6">
         <p className="text-center text-xs text-[var(--fg-subtle)]">
-          © {new Date().getFullYear()} {tFooter('ministryFull')} — {tFooter('rights')}
+          © {new Date().getFullYear()} {tMeta('siteName')} — {tFooter('rights')}
         </p>
       </footer>
     </div>
