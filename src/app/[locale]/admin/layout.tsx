@@ -5,6 +5,7 @@ import { redirect } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
 import { AdminNav } from '@/components/admin/admin-nav'
 import { getCurrentProfile, isAdmin } from '@/lib/auth'
+import { getQrPermissions } from '@/lib/qr/server'
 import { isLocale } from '@/i18n/routing'
 
 export const dynamic = 'force-dynamic'
@@ -37,7 +38,7 @@ export default async function AdminLayout({
     )
   }
 
-  const t = await getTranslations('admin')
+  const [t, qr] = await Promise.all([getTranslations('admin'), getQrPermissions()])
   const items = [
     { key: 'overview' as const, href: '/admin', label: t('navOverview') },
     { key: 'forums' as const, href: '/admin/forums', label: t('navForums') },
@@ -51,7 +52,10 @@ export default async function AdminLayout({
     { key: 'board' as const, href: '/admin/board', label: t('navBoard') },
     { key: 'waitlist' as const, href: '/admin/waitlist', label: t('navWaitlist') },
     { key: 'analytics' as const, href: '/admin/analytics', label: t('navAnalytics') },
+    { key: 'qrAccess' as const, href: '/admin/qr-access', label: t('navQrAccess') },
     { key: 'settings' as const, href: '/admin/settings', label: t('navSettings') },
+    // مساحة الباركود لحاملي صلاحيته — والمشرف لا يملكها تلقائيًّا
+    ...(qr.any ? [{ key: 'qr' as const, href: '/qr', label: t('navQr') }] : []),
   ]
 
   return (

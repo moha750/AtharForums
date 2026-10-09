@@ -117,6 +117,7 @@ export type SiteSettings = {
   about_ar: string | null
   about_en: string | null
   contact_email: string | null
+  qr_custom_codes: boolean
   updated_at: string
   updated_by: string | null
 }
@@ -361,6 +362,181 @@ export type PlatformStats = {
   upcoming_events: number
 }
 
+// ── الباركود الديناميكي (0019_qr.sql) ─────────────────────────────────────
+
+export type AppPermission = 'use_qr_generator' | 'oversee_qr' | 'qr_org_account'
+export type QrKind = 'link' | 'file'
+export type QrShareAccess = 'read' | 'edit'
+export type QrAccess = 'owner' | QrShareAccess
+export type QrLinkAccess = QrAccess | 'oversee'
+export type QrDevice = 'mobile' | 'tablet' | 'desktop' | 'unknown'
+export type QrEventKind =
+  | 'target'
+  | 'file'
+  | 'title'
+  | 'active'
+  | 'spec'
+  | 'delete'
+  | 'owner'
+  | 'schedule'
+  | 'campaign'
+export type QrAlertStatus = 'pending' | 'sent' | 'failed' | 'off'
+
+export type ProfilePermission = {
+  profile_id: string
+  permission: AppPermission
+  granted_by: string | null
+  granted_at: string
+}
+
+export type QrLink = {
+  id: string
+  code: string
+  title: string
+  kind: QrKind
+  target_url: string
+  file_path: string | null
+  spec: Json
+  owner_id: string
+  campaign_id: string | null
+  active: boolean
+  scan_count: number
+  created_at: string
+  updated_at: string
+}
+
+export type QrLinkListItem = Omit<QrLink, 'spec'> & { access: QrAccess }
+
+export type QrCampaign = {
+  id: string
+  name: string
+  note: string | null
+  owner_id: string
+  created_at: string
+  updated_at: string
+}
+
+export type QrCampaignListItem = QrCampaign & { access: QrAccess; links: number; scans: number }
+
+export type QrScan = {
+  id: number
+  link_id: string
+  scanned_at: string
+  visitor: string | null
+  referrer: string | null
+  device: QrDevice
+  is_bot: boolean
+}
+
+export type QrSchedule = {
+  id: string
+  link_id: string
+  target_url: string
+  starts_at: string | null
+  ends_at: string | null
+  note: string | null
+  created_at: string
+}
+
+export type QrLinkEvent = {
+  id: number
+  link_id: string
+  actor_id: string | null
+  kind: QrEventKind
+  old_value: string | null
+  new_value: string | null
+  at: string
+}
+
+export type QrLinkShare = {
+  link_id: string
+  user_id: string
+  access: QrShareAccess
+  granted_by: string | null
+  created_at: string
+}
+
+export type QrCampaignShare = {
+  campaign_id: string
+  user_id: string
+  access: QrShareAccess
+  granted_by: string | null
+  created_at: string
+}
+
+export type QrAlertOutbox = {
+  id: number
+  event_id: number
+  link_id: string
+  status: QrAlertStatus
+  attempts: number
+  error: string | null
+  claimed_at: string | null
+  created_at: string
+  sent_at: string | null
+}
+
+export type QrPerson = { id: string; name: string }
+
+export type QrStats = {
+  total: number
+  bots: number
+  capped: boolean
+  cap: number
+  bucket: 'day' | 'week'
+  from: string
+  to: string
+  series: Array<{ d: string; n: number }>
+  devices: Partial<Record<QrDevice, number>>
+  hours: number[]
+  heatmap: number[][]
+  first: string | null
+  last: string | null
+  week: { current: number; previous: number }
+}
+
+export type QrOverseeLink = {
+  id: string
+  code: string
+  title: string
+  kind: QrKind
+  target_url: string
+  active: boolean
+  scan_count: number
+  owner_id: string
+  owner_name: string
+  campaign_id: string | null
+  created_at: string
+  updated_at: string
+}
+
+export type QrOverseeEvent = {
+  id: number
+  link_id: string
+  link_title: string | null
+  link_code: string | null
+  actor_id: string | null
+  actor_name: string | null
+  kind: QrEventKind
+  old_value: string | null
+  new_value: string | null
+  at: string
+  alert_status: QrAlertStatus | null
+  alert_error: string | null
+}
+
+export type QrAlertClaim = {
+  outbox_id: number
+  link_id: string
+  link_code: string | null
+  link_title: string | null
+  kind: 'target' | 'schedule'
+  old_value: string | null
+  new_value: string | null
+  actor_name: string | null
+  at: string
+}
+
 type Table<Row, Insert = Partial<Row>, Update = Partial<Row>> = {
   Row: Row
   Insert: Insert
@@ -384,6 +560,15 @@ export type Database = {
       waitlist_subscribers: Table<WaitlistSubscriber>
       contact_messages: Table<ContactMessage>
       audit_log: Table<AuditLogRow>
+      profile_permissions: Table<ProfilePermission>
+      qr_links: Table<QrLink>
+      qr_campaigns: Table<QrCampaign>
+      qr_scans: Table<QrScan>
+      qr_schedules: Table<QrSchedule>
+      qr_link_events: Table<QrLinkEvent>
+      qr_link_shares: Table<QrLinkShare>
+      qr_campaign_shares: Table<QrCampaignShare>
+      qr_alert_outbox: Table<QrAlertOutbox>
     }
     Views: { [_ in never]: never }
     Functions: {
@@ -452,6 +637,44 @@ export type Database = {
       analytics_prune: {
         Args: { p_retain_days?: number }
         Returns: Json
+      }
+      qr_link_access: { Args: { p_link: string }; Returns: QrLinkAccess | null }
+      campaign_access: { Args: { p_campaign: string }; Returns: QrAccess | null }
+      qr_custom_codes_enabled: { Args: Record<PropertyKey, never>; Returns: boolean }
+      qr_code_taken: { Args: { p_code: string }; Returns: boolean }
+      qr_share_candidates: { Args: Record<PropertyKey, never>; Returns: QrPerson[] }
+      qr_generator_holders: { Args: Record<PropertyKey, never>; Returns: QrPerson[] }
+      qr_people: { Args: { p_ids: string[] }; Returns: QrPerson[] }
+      qr_my_links: { Args: Record<PropertyKey, never>; Returns: QrLinkListItem[] }
+      qr_my_campaigns: { Args: Record<PropertyKey, never>; Returns: QrCampaignListItem[] }
+      qr_issue_upload_ticket: { Args: { p_mime: string; p_bytes: number }; Returns: string }
+      qr_link_stats: {
+        Args: { p_link: string; p_from?: string | null; p_to?: string | null }
+        Returns: Json
+      }
+      qr_oversee_links: { Args: Record<PropertyKey, never>; Returns: QrOverseeLink[] }
+      qr_trash_sweep: { Args: { p_limit?: number }; Returns: string[] }
+      qr_oversee_events: { Args: { p_limit?: number }; Returns: QrOverseeEvent[] }
+      qr_oversee_set_active: { Args: { p_link: string; p_active: boolean }; Returns: undefined }
+      qr_oversee_delete: { Args: { p_link: string }; Returns: string | null }
+      qr_oversee_transfer: { Args: { p_link: string; p_owner: string }; Returns: undefined }
+      qr_file_of: { Args: { p_code: string }; Returns: string | null }
+      qr_resolve: {
+        Args: {
+          p_secret: string
+          p_code: string
+          p_visitor?: string | null
+          p_referrer?: string | null
+          p_device?: string
+          p_is_bot?: boolean
+        }
+        Returns: string | null
+      }
+      qr_alerts_claim: { Args: { p_secret: string; p_limit?: number }; Returns: QrAlertClaim[] }
+      qr_alerts_recipients: { Args: { p_secret: string }; Returns: string[] }
+      qr_alerts_mark: {
+        Args: { p_secret: string; p_id: number; p_status: string; p_error?: string | null }
+        Returns: undefined
       }
     }
     Enums: {

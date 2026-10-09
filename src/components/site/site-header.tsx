@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { LayoutDashboard, LogIn, Settings2 } from 'lucide-react'
+import { LayoutDashboard, LogIn, QrCode, Settings2 } from 'lucide-react'
 
 import { Link } from '@/i18n/navigation'
 import { Logo } from '@/components/logo'
@@ -8,12 +8,14 @@ import { MobileNav } from '@/components/site/mobile-nav'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { buttonStyles } from '@/components/ui/button'
 import { getCurrentProfile, isAdmin } from '@/lib/auth'
+import { getQrPermissions } from '@/lib/qr/server'
 import type { Locale } from '@/i18n/routing'
 
 export async function SiteHeader({ locale }: { locale: Locale }) {
   const t = await getTranslations('nav')
   const tMeta = await getTranslations('meta')
   const profile = await getCurrentProfile()
+  const qr = profile ? await getQrPermissions() : null
 
   const links = [
     { href: '/forums', label: t('forums') },
@@ -70,6 +72,12 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
                   {t('admin')}
                 </Link>
               ) : null}
+              {qr?.any ? (
+                <Link href={qr.use ? '/qr' : '/qr/oversight'} className={buttonStyles('ghost', 'sm')}>
+                  <QrCode className="size-4" aria-hidden />
+                  {t('qr')}
+                </Link>
+              ) : null}
               <Link href="/me" className={buttonStyles('secondary', 'sm')}>
                 <LayoutDashboard className="size-4" aria-hidden />
                 {t('dashboard')}
@@ -86,6 +94,7 @@ export async function SiteHeader({ locale }: { locale: Locale }) {
             links={[...links]}
             signedIn={Boolean(profile)}
             isAdmin={isAdmin(profile)}
+            qr={qr?.any ? { href: qr.use ? '/qr' : '/qr/oversight', label: t('qr') } : null}
             labels={{
               menu: t('menu'),
               close: t('closeMenu'),

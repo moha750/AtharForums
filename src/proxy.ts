@@ -8,7 +8,7 @@ import { analyticsEnabled, recordPageview } from '@/lib/analytics/record'
 const handleIntl = createIntlMiddleware(routing)
 
 /** المسارات التي تتطلّب تسجيل دخول. تُطابَق بعد إزالة بادئة اللغة. */
-const PROTECTED_PREFIXES = ['/me', '/admin']
+const PROTECTED_PREFIXES = ['/me', '/admin', '/qr']
 
 function splitLocale(pathname: string): { locale: string; path: string } {
   for (const locale of routing.locales) {
@@ -91,5 +91,7 @@ export async function proxy(request: NextRequest, event: NextFetchEvent) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  // q/ خارج الوسيط: باب المسح والصفحتان العامّتان بلا لغة ولا جلسة ولا تسجيل
+  // زيارة — رابطٌ مطبوع لا يُحوَّل إلى /ar/q/… ولا يُبطئه شيء.
+  matcher: ['/((?!api|q/|_next|_vercel|.*\\..*).*)'],
 }

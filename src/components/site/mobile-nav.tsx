@@ -9,10 +9,12 @@ type Props = {
   links: Array<{ href: string; label: string }>
   signedIn: boolean
   isAdmin: boolean
+  /** رابط الباركود لحاملي صلاحيته. */
+  qr?: { href: string; label: string } | null
   labels: { menu: string; close: string; login: string; dashboard: string; admin: string }
 }
 
-export function MobileNav({ links, signedIn, isAdmin, labels }: Props) {
+export function MobileNav({ links, signedIn, isAdmin, qr, labels }: Props) {
   const [open, setOpen] = useState(false)
   const close = () => setOpen(false)
 
@@ -59,6 +61,11 @@ export function MobileNav({ links, signedIn, isAdmin, labels }: Props) {
                   {isAdmin ? (
                     <Link href="/admin" onClick={close} className={buttonStyles('secondary', 'md')}>
                       {labels.admin}
+                    </Link>
+                  ) : null}
+                  {qr ? (
+                    <Link href={qr.href} onClick={close} className={buttonStyles('secondary', 'md')}>
+                      {qr.label}
                     </Link>
                   ) : null}
                   <Link href="/me" onClick={close} className={buttonStyles('primary', 'md')}>

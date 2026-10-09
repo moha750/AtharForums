@@ -15,6 +15,8 @@ import {
   UserCheck,
   ArrowLeft,
   ArrowRight,
+  QrCode,
+  KeyRound,
 } from 'lucide-react'
 
 import { Link, usePathname } from '@/i18n/navigation'
@@ -34,6 +36,8 @@ const ICONS = {
   waitlist: Mail,
   analytics: BarChart3,
   settings: Settings,
+  qrAccess: KeyRound,
+  qr: QrCode,
 } as const
 
 export function AdminNav({

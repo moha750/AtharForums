@@ -7,8 +7,18 @@
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase ← Project Settings ← API | لا |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase ← API Keys ← Publishable key | لا |
 | `NEXT_PUBLIC_SITE_URL` | نطاق الموقع النهائي | لا |
+| `QR_ORIGIN` | النطاق النهائي الذي يُطبع في الباركودات | لا |
+| `QR_SERVER_KEY` | `openssl rand -base64 36` — ويُدرج في `qr_server_key` | **نعم** |
+| `QR_VISITOR_SALT` | `openssl rand -base64 24` | **نعم** |
+| `QR_ALERTS` / `SMTP_URL` / `QR_ALERTS_FROM` | تنبيه تبديل الوجهة (اختياري، مطفأ افتراضيًّا) | `SMTP_URL` نعم |
+| `QR_CRON_SECRET` | سرّ `/api/qr/alerts/drain` (اختياري) | **نعم** |
 
-المشروع **لا يستخدم** `service_role` — لا تضِفه.
+المشروع **لا يستخدم** `service_role` — لا تضِفه. باب المسح يعمل بـ
+`QR_SERVER_KEY`، وبدونه يذهب كل مسح إلى «غير متاح».
+
+> **قبل طباعة أول باركود:** ثبّت `QR_ORIGIN` على النطاق النهائي. الأصل يُطبع
+> داخل الملصق ولا يتغيّر بعدها؛ لو انتقل الموقع إلى نطاق آخر لاحقًا لانكسر كل
+> ملصق طُبع على القديم ما لم يبقَ القديم يحوّل إلى الجديد.
 
 ---
 
